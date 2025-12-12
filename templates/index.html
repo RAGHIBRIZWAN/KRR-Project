@@ -69,61 +69,64 @@
 </div>
 
 <script>
-    let questionsMetaData = []; // Store trait/reverse info locally
+    let questionsMetaData = [];
 
+    // --- 1. FIXED LOGIN FUNCTION ---
     async function handleLogin() {
         const name = document.getElementById('userName').value;
         const id = document.getElementById('userId').value;
         
         if(!name || !id) return alert("Please fill in all fields");
 
-        const response = await fetch('/login', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({name, id})
-        });
-        const result = await response.json();
+        // SKIP server fetch. Just save variables locally.
+        console.log("User logged in:", name);
 
-        if (result.status === 'found') {
-            alert(result.message);
-            // In a real app, you would render the fetched results here.
-            // For now, we allow them to re-take or view data logic you implement.
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('results-section').classList.remove('hidden');
-            document.getElementById('groq-display').innerText = "User recognized. (Implement specific data fetching logic in backend based on your ontology structure)";
-        } else {
-            // New User -> Load Questions
-            loadQuestions();
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('assessment-section').classList.remove('hidden');
+        // Load questions immediately
+        await loadQuestions();
+
+        // Switch screens
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('assessment-section').classList.remove('hidden');
+    }
+
+    // --- 2. LOAD QUESTIONS ---
+    async function loadQuestions() {
+        try {
+            // This now hits the new route in app.py
+            const response = await fetch('/get_questions');
+            questionsMetaData = await response.json();
+            
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            if(questionsMetaData.length === 0) {
+                container.innerHTML = '<p>No questions found in Ontology.</p>';
+                return;
+            }
+
+            questionsMetaData.forEach((q, index) => {
+                const html = `
+                    <div class="question-card">
+                        <p><strong>${index + 1}.</strong> ${q.text}</p>
+                        <div class="options">
+                            ${[1,2,3,4,5].map(val => `
+                                <label class="option-label">
+                                    <input type="radio" name="${q.id}" value="${val}" required>
+                                    ${val}
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        } catch (error) {
+            console.error("Error loading questions:", error);
+            alert("Could not load questions. Is the server running?");
         }
     }
 
-    async function loadQuestions() {
-        const response = await fetch('/get_questions');
-        questionsMetaData = await response.json();
-        
-        const container = document.getElementById('questions-container');
-        container.innerHTML = '';
-
-        questionsMetaData.forEach((q, index) => {
-            const html = `
-                <div class="question-card">
-                    <p><strong>${index + 1}.</strong> ${q.text}</p>
-                    <div class="options">
-                        ${[1,2,3,4,5].map(val => `
-                            <label class="option-label">
-                                <input type="radio" name="${q.id}" value="${val}" required>
-                                ${val}
-                            </label>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-            container.insertAdjacentHTML('beforeend', html);
-        });
-    }
-
+    // --- 3. SUBMIT ---
     async function submitAssessment() {
         const name = document.getElementById('userName').value;
         const id = document.getElementById('userId').value;
@@ -131,7 +134,7 @@
         const formData = new FormData(form);
         const answers = {};
         
-        // Collect answers
+        // Check if all questions are answered
         let allAnswered = true;
         questionsMetaData.forEach(q => {
             const val = formData.get(q.id);
@@ -139,36 +142,50 @@
             answers[q.id] = val;
         });
 
-        if(!allAnswered) return alert("Please answer all 50 questions.");
+        if(!allAnswered) return alert("Please answer all questions.");
 
-        // UI Feedback
+        // Switch to results view
         document.getElementById('assessment-section').classList.add('hidden');
         document.getElementById('results-section').classList.remove('hidden');
-        document.getElementById('scores-display').innerText = "Calculating scores and generating AI analysis...";
+        document.getElementById('scores-display').innerText = "Analyzing personality...";
 
-        const response = await fetch('/submit_assessment', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                name, id, answers, meta: questionsMetaData
-            })
-        });
+        try {
+            const response = await fetch('/submit_assessment', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ name, id, answers })
+            });
 
-        const result = await response.json();
-        
-        // Display Scores
-        const scoresDiv = document.getElementById('scores-display');
-        scoresDiv.innerHTML = '';
-        for (const [trait, score] of Object.entries(result.scores)) {
-            scoresDiv.innerHTML += `
-                <div class="score-card">
-                    <strong>${trait}:</strong> ${score} / 5.0
-                </div>
-            `;
+            const result = await response.json();
+            
+            // Render Scores
+            const scoresDiv = document.getElementById('scores-display');
+            scoresDiv.innerHTML = '<h3>Big Five Scores</h3>';
+            for (const [trait, score] of Object.entries(result.scores)) {
+                scoresDiv.innerHTML += `
+                    <div class="score-card">
+                        <strong>${trait}:</strong> ${score}
+                    </div>
+                `;
+            }
+            
+            // Render Performance (Optional)
+            if(result.performance) {
+                scoresDiv.innerHTML += `<h3>Predictions</h3>
+                <div class="score-card">Job Performance: ${result.performance.JobPerformance}%</div>
+                <div class="score-card">Academic Performance: ${result.performance.AcademicPerformance}%</div>`;
+            }
+
+            // Render Groq
+            // Use marked.js or simple formatting, or just allow basic HTML:
+            document.getElementById('groq-display').innerHTML = result.analysis
+                .replace(/\n/g, "<br>")
+                .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Basic bold parser
+                .replace(/### (.*?)(<br>|$)/g, "<h3>$1</h3>");    // Basic header parser
+        } catch (error) {
+            document.getElementById('scores-display').innerText = "Error calculating scores.";
+            console.error(error);
         }
-
-        // Display Groq Analysis
-        document.getElementById('groq-display').innerText = result.analysis;
     }
 </script>
 
