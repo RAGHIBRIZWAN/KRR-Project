@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Five Assessment</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1, h2 { color: #2c3e50; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { display: block; width: 100%; padding: 12px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 20px; }
+        button:hover { background-color: #2980b9; }
+        
+        /* Question Styles */
+        .question-card { border-bottom: 1px solid #eee; padding: 20px 0; }
+        .options { display: flex; justify-content: space-between; margin-top: 10px; }
+        .option-label { font-weight: normal; font-size: 0.9em; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+        
+        /* Hidden/Show Utility */
+        .hidden { display: none; }
+        
+        /* Results */
+        .score-card { background: #e8f6f3; padding: 15px; margin: 10px 0; border-radius: 4px; }
+        .groq-analysis { background: #fdf2e9; padding: 20px; border-left: 5px solid #e67e22; margin-top: 20px; white-space: pre-line; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Personality Ontology System</h1>
+
+    <div id="login-section">
+        <h2>Login</h2>
+        <div class="form-group">
+            <label>Name:</label>
+            <input type="text" id="userName" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+            <label>User ID:</label>
+            <input type="text" id="userId" placeholder="Enter unique ID">
+        </div>
+        <button onclick="handleLogin()">Start / Login</button>
+    </div>
+
+    <div id="assessment-section" class="hidden">
+        <h2>Assessment</h2>
+        <p>Rate the following statements from 1 (Disagree) to 5 (Agree).</p>
+        <form id="quiz-form">
+            <div id="questions-container">
+                </div>
+            <button type="button" onclick="submitAssessment()">Calculate Personality</button>
+        </form>
+    </div>
+
+    <div id="results-section" class="hidden">
+        <h2>Your Profile</h2>
+        <div id="scores-display"></div>
+        
+        <h3>AI Analysis (Groq)</h3>
+        <div id="groq-display" class="groq-analysis">
+            Loading AI suggestions...
+        </div>
+        
+        <button onclick="location.reload()">Start Over</button>
+    </div>
+</div>
+
+<script>
+    let questionsMetaData = []; // Store trait/reverse info locally
+
+    async function handleLogin() {
+        const name = document.getElementById('userName').value;
+        const id = document.getElementById('userId').value;
+        
+        if(!name || !id) return alert("Please fill in all fields");
+
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({name, id})
+        });
+        const result = await response.json();
+
+        if (result.status === 'found') {
+            alert(result.message);
+            // In a real app, you would render the fetched results here.
+            // For now, we allow them to re-take or view data logic you implement.
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('results-section').classList.remove('hidden');
+            document.getElementById('groq-display').innerText = "User recognized. (Implement specific data fetching logic in backend based on your ontology structure)";
+        } else {
+            // New User -> Load Questions
+            loadQuestions();
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('assessment-section').classList.remove('hidden');
+        }
+    }
+
+    async function loadQuestions() {
+        const response = await fetch('/get_questions');
+        questionsMetaData = await response.json();
+        
+        const container = document.getElementById('questions-container');
+        container.innerHTML = '';
+
+        questionsMetaData.forEach((q, index) => {
+            const html = `
+                <div class="question-card">
+                    <p><strong>${index + 1}.</strong> ${q.text}</p>
+                    <div class="options">
+                        ${[1,2,3,4,5].map(val => `
+                            <label class="option-label">
+                                <input type="radio" name="${q.id}" value="${val}" required>
+                                ${val}
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    async function submitAssessment() {
+        const name = document.getElementById('userName').value;
+        const id = document.getElementById('userId').value;
+        const form = document.getElementById('quiz-form');
+        const formData = new FormData(form);
+        const answers = {};
+        
+        // Collect answers
+        let allAnswered = true;
+        questionsMetaData.forEach(q => {
+            const val = formData.get(q.id);
+            if(!val) allAnswered = false;
+            answers[q.id] = val;
+        });
+
+        if(!allAnswered) return alert("Please answer all 50 questions.");
+
+        // UI Feedback
+        document.getElementById('assessment-section').classList.add('hidden');
+        document.getElementById('results-section').classList.remove('hidden');
+        document.getElementById('scores-display').innerText = "Calculating scores and generating AI analysis...";
+
+        const response = await fetch('/submit_assessment', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                name, id, answers, meta: questionsMetaData
+            })
+        });
+
+        const result = await response.json();
+        
+        // Display Scores
+        const scoresDiv = document.getElementById('scores-display');
+        scoresDiv.innerHTML = '';
+        for (const [trait, score] of Object.entries(result.scores)) {
+            scoresDiv.innerHTML += `
+                <div class="score-card">
+                    <strong>${trait}:</strong> ${score} / 5.0
+                </div>
+            `;
+        }
+
+        // Display Groq Analysis
+        document.getElementById('groq-display').innerText = result.analysis;
+    }
+</script>
+
+</body>
+</html>
