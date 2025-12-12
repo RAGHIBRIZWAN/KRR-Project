@@ -1,1348 +1,2122 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-         xmlns:owl="http://www.w3.org/2002/07/owl#"
-         xml:base="http://www.semanticweb.org/personality"
-         xmlns="http://www.semanticweb.org/personality#"
-         xmlns:x_1.1="http://purl.org/dc/elements/1.1/">
-
-<owl:Ontology rdf:about="http://www.semanticweb.org/personality">
-  <x_1.1:creator rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Personality Research Project</x_1.1:creator>
-  <x_1.1:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Comprehensive ontology for Big Five personality traits, assessment questions, and performance relationships based on IPIP markers and meta-analytic research</x_1.1:description>
-  <x_1.1:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Big Five Personality and Performance Ontology</x_1.1:title>
-  <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1.0</owl:versionInfo>
-</owl:Ontology>
-
-<owl:ObjectProperty rdf:about="#basedOnTraitScore">
-  <rdfs:domain rdf:resource="#PerformancePredictionScore"/>
-  <rdfs:range rdf:resource="#TraitScore"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Links performance prediction to the trait score it's derived from</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">basedOnTraitScore</rdfs:label>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#completedBy">
-  <rdfs:domain rdf:resource="#Assessment"/>
-  <rdfs:range rdf:resource="#Participant"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Links an assessment to the participant who completed it</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">completedBy</rdfs:label>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#examines">
-  <rdfs:domain rdf:resource="#ResearchStudy"/>
-  <rdfs:range rdf:resource="#PersonalityTrait"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Indicates which personality trait a research study investigates</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">examines</rdfs:label>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#focusesOnDomain">
-  <rdfs:domain rdf:resource="#ResearchStudy"/>
-  <rdfs:range rdf:resource="#PerformanceDomain"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Indicates which performance domain a study examines</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">focusesOnDomain</rdfs:label>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#hasEffectSizeCategory">
-  <rdfs:domain rdf:resource="#ResearchStudy"/>
-  <rdfs:range rdf:resource="#EffectSizeCategory"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Categorizes the research effect size</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hasEffectSizeCategory</rdfs:label>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#hasQuestion">
-  <rdfs:domain rdf:resource="#Assessment"/>
-  <rdfs:range rdf:resource="#AssessmentQuestion"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Links an assessment to its constituent questions</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hasQuestion</rdfs:label>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#hasScore">
-  <rdfs:domain rdf:resource="#Assessment"/>
-  <rdfs:range rdf:resource="#Score"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Links an assessment to its calculated scores</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hasScore</rdfs:label>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#measures">
-  <rdfs:domain rdf:resource="#AssessmentQuestion"/>
-  <rdfs:range rdf:resource="#PersonalityTrait"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Indicates which personality trait a question assesses</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">measures</rdfs:label>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#predictsPerformanceIn">
-  <rdfs:domain rdf:resource="#PersonalityTrait"/>
-  <rdfs:range rdf:resource="#PerformanceDomain"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Indicates which performance domains a trait predicts</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">predictsPerformanceIn</rdfs:label>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#predictsPerformanceInDomain">
-  <rdfs:domain rdf:resource="#PerformancePredictionScore"/>
-  <rdfs:range rdf:resource="#PerformanceDomain"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Indicates which performance domain the prediction applies to</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">predictsPerformanceInDomain</rdfs:label>
-</owl:ObjectProperty>
-
-<owl:ObjectProperty rdf:about="#scoresOnTrait">
-  <rdfs:domain rdf:resource="#TraitScore"/>
-  <rdfs:range rdf:resource="#PersonalityTrait"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Indicates which personality trait the score measures</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">scoresOnTrait</rdfs:label>
-</owl:ObjectProperty>
-
-<owl:DatatypeProperty rdf:about="#age">
-  <rdfs:domain rdf:resource="#Participant"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Age of participant in years</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">age</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#categoryName">
-  <rdfs:domain rdf:resource="#EffectSizeCategory"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Name of effect size category (Very Small, Small, Medium, Large, Very Large)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">categoryName</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#confidenceIntervalLower">
-  <rdfs:domain rdf:resource="#ResearchStudy"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lower bound of 95% confidence interval for effect size</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">confidenceIntervalLowerBound</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#confidenceIntervalUpper">
-  <rdfs:domain rdf:resource="#ResearchStudy"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Upper bound of 95% confidence interval for effect size</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">confidenceIntervalUpperBound</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#confidenceLevel">
-  <rdfs:domain rdf:resource="#PerformancePredictionScore"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Level of confidence in prediction (e.g., High, Medium, Low)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">confidenceLevel</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#correlationCoefficient">
-  <rdfs:domain rdf:resource="#PerformancePredictionScore"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Effect size (ρ) used for prediction from meta-analytic research</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">correlationCoefficient</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#country">
-  <rdfs:domain rdf:resource="#Participant"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Country of participant determined by technical information</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">country</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#domainDescription">
-  <rdfs:domain rdf:resource="#PerformanceDomain"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Description of what the performance domain measures</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">domainDescription</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#domainName">
-  <rdfs:domain rdf:resource="#PerformanceDomain"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Name of the performance domain</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">domainName</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#effectSize">
-  <rdfs:domain rdf:resource="#ResearchStudy"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Meta-analytic effect size measured as correlation coefficient (ρ)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">effectSize</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#endElapsedTime">
-  <rdfs:domain rdf:resource="#Assessment"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Time spent on finalization page in seconds (endelapse)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">endelapsedTime</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#gender">
-  <rdfs:domain rdf:resource="#Participant"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Gender of participant</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">gender</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#interpretationText">
-  <rdfs:domain rdf:resource="#Score"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Human-readable interpretation of the score</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">interpretationText</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#introElapsedTime">
-  <rdfs:domain rdf:resource="#Assessment"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Time spent on landing/intro page in seconds (introelapse)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">introelapsedTime</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#ipCount">
-  <rdfs:domain rdf:resource="#Participant"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Number of records from participant's IP address in dataset (IPC)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">IPCount</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#isReverseCoded">
-  <rdfs:domain rdf:resource="#AssessmentQuestion"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Indicates whether the question is reverse-scored</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">isReverseCoded</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#maximumValue">
-  <rdfs:domain rdf:resource="#EffectSizeCategory"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Maximum correlation value for this category</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">maximumValue</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#meanScore">
-  <rdfs:domain rdf:resource="#TraitScore"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Average score across the 10 items for the trait</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">meanScore</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#measurementType">
-  <rdfs:domain rdf:resource="#PerformanceDomain"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Type of measurement used (e.g., GPA, supervisor rating, test score)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">measurementType</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#minimumValue">
-  <rdfs:domain rdf:resource="#EffectSizeCategory"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Minimum correlation value for this category</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">minimumValue</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#name">
-  <rdfs:domain rdf:resource="#Participant"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#numberOfStudies">
-  <rdfs:domain rdf:resource="#ResearchStudy"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Number of individual studies (k) included in meta-analysis</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">numberOfStudies</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#participantID">
-  <rdfs:domain rdf:resource="#Participant"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Unique identifier for the participant</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">participantID</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#percentileRank">
-  <rdfs:domain rdf:resource="#TraitScore"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Percentile ranking (0-100) compared to normative sample</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">percentileRank</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#predictionValue">
-  <rdfs:domain rdf:resource="#PerformancePredictionScore"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Predicted performance value based on trait-performance correlation</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">predictionValue</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#publicationYear">
-  <rdfs:domain rdf:resource="#ResearchStudy"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Year the research study was published</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">publicationYear</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#questionID">
-  <rdfs:domain rdf:resource="#AssessmentQuestion"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Unique identifier for the question (e.g., EXT1, AGR2)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">questionID</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#questionOrder">
-  <rdfs:domain rdf:resource="#AssessmentQuestion"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The order in which the question appears (1-50)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">questionOrder</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#questionText">
-  <rdfs:domain rdf:resource="#AssessmentQuestion"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The text content of the assessment question</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">questionText</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#rawScore">
-  <rdfs:domain rdf:resource="#TraitScore"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sum of responses before any transformations (accounting for reverse-coding)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">rawScore</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#responseTimeMs">
-  <rdfs:domain rdf:resource="#AssessmentQuestion"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Time taken to answer the question in milliseconds</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">responseTimeInMilliseconds</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#responseValue">
-  <rdfs:domain rdf:resource="#AssessmentQuestion"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The response value on Likert scale (1=Disagree, 3=Neutral, 5=Agree)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">responseValue</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#sampleSize">
-  <rdfs:domain rdf:resource="#ResearchStudy"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Total number of participants (N) included in meta-analysis</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">sampleSize</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#scoreValue">
-  <rdfs:domain rdf:resource="#Score"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Numerical value of the calculated score</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">scoreValue</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#screenHeight">
-  <rdfs:domain rdf:resource="#Assessment"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Height of participant's screen in pixels (screenh)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">screenHeight</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#screenWidth">
-  <rdfs:domain rdf:resource="#Assessment"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Width of participant's screen in pixels (screenw)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">screenWidth</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#standardizedScore">
-  <rdfs:domain rdf:resource="#TraitScore"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Normalized score (z-score) based on population norms</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">standardizedScore</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#studyAuthor">
-  <rdfs:domain rdf:resource="#ResearchStudy"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Primary author(s) of the research study</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">studyAuthor</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#totalElapsedTime">
-  <rdfs:domain rdf:resource="#Assessment"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Total time spent completing assessment in seconds (testelapse)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">totalElapsedTime</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#traitDescription">
-  <rdfs:domain rdf:resource="#PersonalityTrait"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Detailed description of the personality trait characteristics</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">traitDescription</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#traitLevel">
-  <rdfs:domain rdf:resource="#PersonalityTrait"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Categorization of trait level (e.g., Low, Medium, High)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">traitLevel</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:DatatypeProperty rdf:about="#traitScore">
-  <rdfs:domain rdf:resource="#PersonalityTrait"/>
-  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Calculated aggregate score for the personality trait</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">traitScore</rdfs:label>
-</owl:DatatypeProperty>
-
-<owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/creator"/>
-
-<owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/description"/>
-
-<owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/title"/>
-
-<owl:Class rdf:about="#PerformancePredictionScore">
-  <rdfs:subClassOf rdf:resource="#Score"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Predicted performance score in a specific domain based on personality traits</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PerformancePredictionScore</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#TraitScore">
-  <rdfs:subClassOf rdf:resource="#Score"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Calculated score for a specific Big Five personality trait based on responses</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">TraitScore</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#Assessment">
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A completed personality test instance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Assessment</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#Participant">
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An individual who completes a personality assessment</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Participant</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#ResearchStudy">
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Meta-analytic research examining personality-performance relationships</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ResearchStudy</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#PersonalityTrait">
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A characteristic pattern of thinking, feeling, and behaving</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PersonalityTrait</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#PerformanceDomain">
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An area where personality-performance relationships are measured</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PerformanceDomain</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#EffectSizeCategory">
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Classification of effect sizes based on research standards</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EffectSizeCategory</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#AssessmentQuestion">
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A survey item used to measure personality traits</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AssessmentQuestion</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#Score">
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A calculated score representing trait levels and performance predictions</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Score</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#AcademicPerformance">
-  <rdfs:subClassOf rdf:resource="#PerformanceDomain"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Performance measured by GPA and course grades</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AcademicPerformance</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#Agreeableness">
-  <rdfs:subClassOf rdf:resource="#PersonalityTrait"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reflects trust, altruism, compliance, and modesty</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">agreeableness</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#Conscientiousness">
-  <rdfs:subClassOf rdf:resource="#PersonalityTrait"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reflects order, dutifulness, achievement-striving, self-discipline, and deliberation</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">conscientiousness</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#Extraversion">
-  <rdfs:subClassOf rdf:resource="#PersonalityTrait"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reflects qualities such as warmth, gregariousness, assertiveness, activity, and positive emotion</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">extraversion</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#JobPerformance">
-  <rdfs:subClassOf rdf:resource="#PerformanceDomain"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Performance in workplace settings including overall job effectiveness</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">JobPerformance</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#NegativelyKeyedQuestion">
-  <rdfs:subClassOf rdf:resource="#AssessmentQuestion"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Question where agreement indicates lower trait level (reverse-scored)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NegativelyKeyedQuestion</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#Neuroticism">
-  <rdfs:subClassOf rdf:resource="#PersonalityTrait"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reflects anxiety, hostility, depression, self-consciousness, and vulnerability (also measured as Emotional Stability)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">neuroticism</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#Openness">
-  <rdfs:subClassOf rdf:resource="#PersonalityTrait"/>
-  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reflects curiosity, creativity, resourcefulness, and willingness to consider unconventional ideas</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">openness</rdfs:label>
-</owl:Class>
-
-<owl:Class rdf:about="#PositivelyKeyedQuestion">
-  <rdfs:subClassOf rdf:resource="#AssessmentQuestion"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Question where agreement indicates higher trait level</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PositivelyKeyedQuestion</rdfs:label>
-</owl:Class>
-
-<owl:NamedIndividual rdf:about="#AGR1">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Agreeableness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AGR1</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">21</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I feel little concern for others.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AGR10">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Agreeableness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AGR10</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I make people feel at ease.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AGR2">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Agreeableness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AGR2</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">22</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I am interested in people.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AGR3">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Agreeableness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AGR3</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">23</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I insult people.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AGR4">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Agreeableness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AGR4</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">24</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I sympathize with others' feelings.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AGR5">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Agreeableness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AGR5</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I am not interested in other people's problems.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AGR6">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Agreeableness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AGR6</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">26</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I have a soft heart.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AGR7">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Agreeableness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AGR7</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">27</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I am not really interested in others.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AGR8">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Agreeableness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AGR8</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">28</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I take time out for others.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AGR9">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Agreeableness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AGR9</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">29</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I feel others' emotions.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AcademicPerf">
-  <rdf:type rdf:resource="#AcademicPerformance"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Measured by GPA and course grades at primary, secondary, and tertiary levels</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AcademicPerformanceDomain</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AgreeablenessAcademicPerf">
-  <rdf:type rdf:resource="#ResearchStudy"/>
-  <examines rdf:resource="#Agreeableness"/>
-  <focusesOnDomain rdf:resource="#AcademicPerf"/>
-  <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.07</effectSize>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Small positive correlation between agreeableness and academic performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AgreeablenessAcademicPerformanceStudy</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AgreeablenessEmotionalIntel">
-  <examines rdf:resource="#Agreeableness"/>
-  <focusesOnDomain rdf:resource="#EmotionalIntelPerf"/>
-  <hasEffectSizeCategory rdf:resource="#MediumEffect"/>
-  <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.21</effectSize>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Medium positive correlation - agreeableness has strongest effect on emotional intelligence</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">agreeablenessEmotionalIntelligenceStudy</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EmotionalIntelPerf">
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ability-based emotional intelligence assessment performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">emotionalIntelligenceDomain</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#MediumEffect">
-  <rdf:type rdf:resource="#EffectSizeCategory"/>
-  <categoryName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Medium</categoryName>
-  <maximumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.29</maximumValue>
-  <minimumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.2</minimumValue>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Effect size of 0.20 (Funder &amp; Ozer, 2019; Gignac &amp; Szordorai, 2016)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mediumEffectSize</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AgreeablenessJobPerf">
-  <rdf:type rdf:resource="#ResearchStudy"/>
-  <examines rdf:resource="#Agreeableness"/>
-  <focusesOnDomain rdf:resource="#JobPerf"/>
-  <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.11</effectSize>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Small positive correlation between agreeableness and job performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">agreeablenessJobPerformanceStudy</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#JobPerf">
-  <rdf:type rdf:resource="#JobPerformance"/>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Overall workplace effectiveness and proficiency</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">jobPerformanceDomain</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#AgreeablenessTrait">
-  <rdf:type rdf:resource="#Agreeableness"/>
-  <predictsPerformanceIn rdf:resource="#EmotionalIntelPerf"/>
-  <predictsPerformanceIn rdf:resource="#JobPerf"/>
-  <traitDescription rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Agreeableness reflects trust, altruism, compliance, and modesty. Benefits in performance come via ability to manage conflict and aversive situations, thus avoiding counterproductive behaviors. Particularly important in interpersonal settings.</traitDescription>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#CSN1">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Conscientiousness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CSN1</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">31</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I am always prepared.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#CSN10">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Conscientiousness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CSN10</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">40</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I am exacting in my work.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#CSN2">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Conscientiousness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CSN2</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">32</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I leave my belongings around.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#CSN3">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Conscientiousness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CSN3</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">33</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I pay attention to details.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#CSN4">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Conscientiousness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CSN4</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">34</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I make a mess of things.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#CSN5">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Conscientiousness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CSN5</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">35</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I get chores done right away.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#CSN6">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Conscientiousness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CSN6</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">36</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I often forget to put things back in their proper place.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#CSN7">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Conscientiousness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CSN7</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">37</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I like order.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#CSN8">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Conscientiousness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CSN8</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">38</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I shirk my duties.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#CSN9">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Conscientiousness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CSN9</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">39</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I follow a schedule.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ConscientiousnessAcademicPerf">
-  <rdf:type rdf:resource="#ResearchStudy"/>
-  <examines rdf:resource="#Conscientiousness"/>
-  <focusesOnDomain rdf:resource="#AcademicPerf"/>
-  <hasEffectSizeCategory rdf:resource="#LargeEffect"/>
-  <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.28</effectSize>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Large positive correlation between conscientiousness and academic performance - strongest predictor</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">conscientiousnessAcademicPerformanceStudy</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#LargeEffect">
-  <rdf:type rdf:resource="#EffectSizeCategory"/>
-  <categoryName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Large</categoryName>
-  <maximumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.39</maximumValue>
-  <minimumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.3</minimumValue>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Effect size of 0.30 (Funder &amp; Ozer, 2019; Gignac &amp; Szordorai, 2016)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">largeEffectSize</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ConscientiousnessJobPerf">
-  <rdf:type rdf:resource="#ResearchStudy"/>
-  <examines rdf:resource="#Conscientiousness"/>
-  <focusesOnDomain rdf:resource="#JobPerf"/>
-  <hasEffectSizeCategory rdf:resource="#MediumEffect"/>
-  <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.2</effectSize>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Medium positive correlation between conscientiousness and job performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">conscientiousnessJobPerformanceStudy</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ConscientiousnessTrait">
-  <rdf:type rdf:resource="#Conscientiousness"/>
-  <predictsPerformanceIn rdf:resource="#AcademicPerf"/>
-  <predictsPerformanceIn rdf:resource="#JobPerf"/>
-  <traitDescription rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Conscientiousness reflects order, dutifulness, achievement-striving, self-discipline, and deliberation. Benefits come via enhanced work ethic and self-control. Most robust predictor of performance across domains, especially strong in academic settings where it helps maintain focus even on low-interest tasks.</traitDescription>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#CreativePerf">
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Performance in creative and innovative tasks</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">creativityPerformanceDomain</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EST1">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Neuroticism"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EST1</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">11</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I get stressed out easily.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EST10">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Neuroticism"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EST10</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I often feel blue.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EST2">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Neuroticism"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EST2</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I am relaxed most of the time.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EST3">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Neuroticism"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EST3</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">13</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I worry about things.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EST4">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Neuroticism"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EST4</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">14</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I seldom feel blue.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EST5">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Neuroticism"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EST5</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I am easily disturbed.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EST6">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Neuroticism"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EST6</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">16</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I get upset easily.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EST7">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Neuroticism"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EST7</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">17</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I change my mood a lot.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EST8">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Neuroticism"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EST8</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">18</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I have frequent mood swings.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EST9">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Neuroticism"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EST9</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I get irritated easily.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EXT1">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#ExtraversionTrait"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EXT1</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I am the life of the party.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ExtraversionTrait">
-  <rdf:type rdf:resource="#Extraversion"/>
-  <predictsPerformanceIn rdf:resource="#JobPerf"/>
-  <predictsPerformanceIn rdf:resource="#LeaderPerf"/>
-  <traitDescription rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Extraversion encompasses warmth, gregariousness, assertiveness, activity, and positive emotion. Benefits in performance come via increased assertiveness, positive emotions, and activity levels, particularly important in interpersonal work settings.</traitDescription>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#LeaderPerf">
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Leadership effectiveness and management performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">leadershipPerformanceDomain</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EXT10">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#ExtraversionTrait"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EXT10</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I am quiet around strangers.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EXT2">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#ExtraversionTrait"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EXT2</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I don't talk a lot.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EXT3">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#ExtraversionTrait"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EXT3</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I feel comfortable around people.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EXT4">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#ExtraversionTrait"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EXT4</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I keep in the background.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EXT5">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#ExtraversionTrait"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EXT5</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I start conversations.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EXT6">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#ExtraversionTrait"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EXT6</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">6.0</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I have little to say.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EXT7">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#ExtraversionTrait"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EXT7</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I talk to a lot of different people at parties.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EXT8">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#ExtraversionTrait"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EXT8</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I don't like to draw attention to myself.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#EXT9">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#ExtraversionTrait"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EXT9</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I don't mind being the center of attention.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ExampleAcademicPrediction">
-  <rdf:type rdf:resource="#PerformancePredictionScore"/>
-  <basedOnTraitScore rdf:resource="#ExampleConscientiousnessScore"/>
-  <predictsPerformanceInDomain rdf:resource="#AcademicPerf"/>
-  <confidenceLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">High</confidenceLevel>
-  <correlationCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.28</correlationCoefficient>
-  <interpretationText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Based on your high conscientiousness (ρ=0.28), you are predicted to perform well in academic settings. Conscientiousness is the strongest predictor of academic success.</interpretationText>
-  <predictionValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.336</predictionValue>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">exampleAcademicPerformancePrediction</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ExampleConscientiousnessScore">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <scoresOnTrait rdf:resource="#ConscientiousnessTrait"/>
-  <interpretationText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">High conscientiousness - you are highly organized, reliable, and achievement-oriented</interpretationText>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.2</meanScore>
-  <percentileRank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">88</percentileRank>
-  <rawScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">42.0</rawScore>
-  <standardizedScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.2</standardizedScore>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">exampleConscientiousnessScore</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ExampleAgreeablenessScore">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <scoresOnTrait rdf:resource="#AgreeablenessTrait"/>
-  <interpretationText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Moderate to high agreeableness - you are generally cooperative and compassionate</interpretationText>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3.8</meanScore>
-  <percentileRank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">76</percentileRank>
-  <rawScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">38.0</rawScore>
-  <standardizedScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.7</standardizedScore>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">exampleAgreeablenessScore</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ExampleCreativityPrediction">
-  <basedOnTraitScore rdf:resource="#ExampleOpennessScore"/>
-  <predictsPerformanceInDomain rdf:resource="#CreativePerf"/>
-  <confidenceLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Medium</confidenceLevel>
-  <correlationCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.16</correlationCoefficient>
-  <interpretationText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Your high openness (ρ=0.16) suggests strong potential for creative performance. Your curiosity and willingness to explore unconventional ideas are assets.</interpretationText>
-  <predictionValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.144</predictionValue>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">exampleCreativityPerformancePrediction</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ExampleOpennessScore">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <scoresOnTrait rdf:resource="#OpennessTrait"/>
-  <interpretationText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">High openness - you are intellectually curious, creative, and open to new experiences</interpretationText>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.0</meanScore>
-  <percentileRank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">82</percentileRank>
-  <rawScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">40.0</rawScore>
-  <standardizedScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9</standardizedScore>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">exampleOpennessScore</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OpennessTrait">
-  <rdf:type rdf:resource="#Openness"/>
-  <predictsPerformanceIn rdf:resource="#AcademicPerf"/>
-  <predictsPerformanceIn rdf:resource="#CreativePerf"/>
-  <traitDescription rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Openness reflects curiosity, creativity, resourcefulness, and willingness to consider unconventional ideas. Benefits come via interest in intellectual, imaginative, and creative pursuits. Particularly important in intellectual and creative performance contexts.</traitDescription>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ExampleEmotionalIntelligencePrediction">
-  <basedOnTraitScore rdf:resource="#ExampleAgreeablenessScore"/>
-  <predictsPerformanceInDomain rdf:resource="#EmotionalIntelPerf"/>
-  <confidenceLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Medium</confidenceLevel>
-  <correlationCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.21</correlationCoefficient>
-  <interpretationText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Your agreeableness level (ρ=0.21) is the strongest predictor of emotional intelligence performance. Your empathy and interpersonal skills are likely strengths.</interpretationText>
-  <predictionValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.147</predictionValue>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">exampleEmotionalIntelligencePrediction</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ExampleExtraversionScore">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <scoresOnTrait rdf:resource="#ExtraversionTrait"/>
-  <interpretationText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Moderate to high extraversion - you tend to be sociable and outgoing</interpretationText>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3.5</meanScore>
-  <percentileRank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">69</percentileRank>
-  <rawScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">35.0</rawScore>
-  <standardizedScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.5</standardizedScore>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">exampleExtraversionScore</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ExampleJobPrediction">
-  <rdf:type rdf:resource="#PerformancePredictionScore"/>
-  <basedOnTraitScore rdf:resource="#ExampleConscientiousnessScore"/>
-  <predictsPerformanceInDomain rdf:resource="#JobPerf"/>
-  <confidenceLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Medium</confidenceLevel>
-  <correlationCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.2</correlationCoefficient>
-  <interpretationText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Your conscientiousness level (ρ=0.20) suggests good potential for job performance. Combined with moderate extraversion (ρ=0.14), you have positive indicators for workplace success.</interpretationText>
-  <predictionValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.24</predictionValue>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">exampleJobPerformancePrediction</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ExampleNeuroticismScore">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <scoresOnTrait rdf:resource="#NeuroticismTrait"/>
-  <interpretationText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Low to moderate neuroticism (high emotional stability) - you tend to be calm and emotionally stable</interpretationText>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">2.5</meanScore>
-  <percentileRank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">38</percentileRank>
-  <rawScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">25.0</rawScore>
-  <standardizedScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-0.3</standardizedScore>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">exampleNeuroticismScore</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#NeuroticismTrait">
-  <rdf:type rdf:resource="#Neuroticism"/>
-  <predictsPerformanceIn rdf:resource="#JobPerf"/>
-  <traitDescription rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Neuroticism (or low emotional stability) reflects anxiety, hostility, depression, self-consciousness, and vulnerability. Low neuroticism benefits performance via increased motivation and self-efficacy. More important in work settings than academic contexts.</traitDescription>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ExtraversionAcademicPerf">
-  <rdf:type rdf:resource="#ResearchStudy"/>
-  <examines rdf:resource="#Extraversion"/>
-  <focusesOnDomain rdf:resource="#AcademicPerf"/>
-  <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-0.01</effectSize>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Negligible correlation between extraversion and academic performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">extraversionAcademicPerformanceStudy</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ExtraversionJobPerf">
-  <rdf:type rdf:resource="#ResearchStudy"/>
-  <examines rdf:resource="#Extraversion"/>
-  <focusesOnDomain rdf:resource="#JobPerf"/>
-  <hasEffectSizeCategory rdf:resource="#SmallEffect"/>
-  <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.14</effectSize>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Small positive correlation between extraversion and job performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">extraversionJobPerformanceStudy</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#SmallEffect">
-  <rdf:type rdf:resource="#EffectSizeCategory"/>
-  <categoryName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Small</categoryName>
-  <maximumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.19</maximumValue>
-  <minimumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.1</minimumValue>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Effect size of 0.10 (Funder &amp; Ozer, 2019; Gignac &amp; Szordorai, 2016)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">smallEffectSize</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#NeuroticismAcademicPerf">
-  <rdf:type rdf:resource="#ResearchStudy"/>
-  <examines rdf:resource="#Neuroticism"/>
-  <focusesOnDomain rdf:resource="#AcademicPerf"/>
-  <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-0.03</effectSize>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Negligible negative correlation between neuroticism and academic performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">neuroticismAcademicPerformanceStudy</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#NeuroticismJobPerf">
-  <rdf:type rdf:resource="#ResearchStudy"/>
-  <examines rdf:resource="#Neuroticism"/>
-  <focusesOnDomain rdf:resource="#JobPerf"/>
-  <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-0.15</effectSize>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Small negative correlation between neuroticism and job performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">neuroticismJobPerformanceStudy</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OPN1">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Openness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OPN1</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">41</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I have a rich vocabulary.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OPN10">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Openness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OPN10</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I am full of ideas.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OPN2">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Openness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OPN2</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">42</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I have difficulty understanding abstract ideas.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OPN3">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Openness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OPN3</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">43</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I have a vivid imagination.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OPN4">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Openness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OPN4</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">44</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I am not interested in abstract ideas.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OPN5">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Openness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OPN5</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I have excellent ideas.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OPN6">
-  <rdf:type rdf:resource="#NegativelyKeyedQuestion"/>
-  <measures rdf:resource="#Openness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OPN6</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">46</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I do not have a good imagination.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OPN7">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Openness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OPN7</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">47</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I am quick to understand things.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OPN8">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Openness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OPN8</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">48</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I use difficult words.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OPN9">
-  <rdf:type rdf:resource="#PositivelyKeyedQuestion"/>
-  <measures rdf:resource="#Openness"/>
-  <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
-  <questionID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OPN9</questionID>
-  <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">49</questionOrder>
-  <questionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">I spend time reflecting on things.</questionText>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OpennessAcademicPerf">
-  <rdf:type rdf:resource="#ResearchStudy"/>
-  <examines rdf:resource="#Openness"/>
-  <focusesOnDomain rdf:resource="#AcademicPerf"/>
-  <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.14</effectSize>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Small positive correlation between openness and academic performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">opennessAcademicPerformanceStudy</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OpennessCreativity">
-  <examines rdf:resource="#Openness"/>
-  <focusesOnDomain rdf:resource="#CreativePerf"/>
-  <hasEffectSizeCategory rdf:resource="#SmallEffect"/>
-  <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.16</effectSize>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Small-to-medium positive correlation between openness and creative performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">opennessCreativityStudy</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OpennessJobPerf">
-  <rdf:type rdf:resource="#ResearchStudy"/>
-  <examines rdf:resource="#Openness"/>
-  <focusesOnDomain rdf:resource="#JobPerf"/>
-  <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.11</effectSize>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Small positive correlation between openness and job performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">opennessJobPerformanceStudy</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#OverallPerformanceStudy">
-  <rdf:type rdf:resource="#ResearchStudy"/>
-  <examines rdf:resource="#Agreeableness"/>
-  <examines rdf:resource="#Conscientiousness"/>
-  <examines rdf:resource="#Extraversion"/>
-  <examines rdf:resource="#Neuroticism"/>
-  <examines rdf:resource="#Openness"/>
-  <numberOfStudies rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2028</numberOfStudies>
-  <sampleSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">554778</sampleSize>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">overallPerformanceMetaAnalysis</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#VeryLargeEffect">
-  <rdf:type rdf:resource="#EffectSizeCategory"/>
-  <categoryName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Very Large</categoryName>
-  <maximumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</maximumValue>
-  <minimumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.4</minimumValue>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Effect size of 0.40 or greater (Funder &amp; Ozer, 2019; Gignac &amp; Szordorai, 2016)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">veryLargeEffectSize</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#VerySmallEffect">
-  <rdf:type rdf:resource="#EffectSizeCategory"/>
-  <categoryName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Very Small</categoryName>
-  <maximumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.05</maximumValue>
-  <minimumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</minimumValue>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Effect size of 0.05 or less (Funder &amp; Ozer, 2019; Gignac &amp; Szordorai, 2016)</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">verySmallEffectSize</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#ZellLesick2022">
-  <rdf:type rdf:resource="#ResearchStudy"/>
-  <numberOfStudies rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">54</numberOfStudies>
-  <publicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2022</publicationYear>
-  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Comprehensive synthesis of 50+ meta-analyses examining Big Five and performance</rdfs:comment>
-  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">zellAndLesick2022MetaSynthesis</rdfs:label>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#['raghib']">
-  <rdf:type rdf:resource="#Participant"/>
-  <participantID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">rag1</participantID>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#Score_rag1_Openness">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.2</meanScore>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#Score_rag1_Conscientiousness">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.1</meanScore>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#Score_rag1_Extraversion">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</meanScore>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#Score_rag1_Agreeableness">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.0</meanScore>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#Score_rag1_Neuroticism">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.6</meanScore>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#['umar']">
-  <rdf:type rdf:resource="#Participant"/>
-  <participantID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">um1</participantID>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#Score_um1_Openness">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.6</meanScore>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#Score_um1_Conscientiousness">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.1</meanScore>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#Score_um1_Extraversion">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</meanScore>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#Score_um1_Agreeableness">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.8</meanScore>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#Score_um1_Neuroticism">
-  <rdf:type rdf:resource="#TraitScore"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.7</meanScore>
-</owl:NamedIndividual>
+<rdf:RDF xmlns="http://www.semanticweb.org/personality#"
+     xml:base="http://www.semanticweb.org/personality"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/personality">
+        <dc:creator>Personality Research Project</dc:creator>
+        <dc:description>Comprehensive ontology for Big Five personality traits, assessment questions, and performance relationships based on IPIP markers and meta-analytic research</dc:description>
+        <dc:title>Big Five Personality and Performance Ontology</dc:title>
+        <owl:versionInfo>1.0</owl:versionInfo>
+    </owl:Ontology>
+    
 
 
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/creator -->
+
+    <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/creator"/>
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/description -->
+
+    <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/description"/>
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/title -->
+
+    <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/title"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/personality#basedOnTraitScore -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/personality#basedOnTraitScore">
+        <rdfs:range rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <rdfs:comment>Links performance prediction to the trait score it&apos;s derived from</rdfs:comment>
+        <rdfs:label>basedOnTraitScore</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#completedBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/personality#completedBy">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Assessment"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/personality#Participant"/>
+        <rdfs:comment>Links an assessment to the participant who completed it</rdfs:comment>
+        <rdfs:label>completedBy</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#examines -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/personality#examines">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/personality#PersonalityTrait"/>
+        <rdfs:comment>Indicates which personality trait a research study investigates</rdfs:comment>
+        <rdfs:label>examines</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#focusesOnDomain -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/personality#focusesOnDomain">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/personality#PerformanceDomain"/>
+        <rdfs:comment>Indicates which performance domain a study examines</rdfs:comment>
+        <rdfs:label>focusesOnDomain</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#hasEffectSizeCategory -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/personality#hasEffectSizeCategory">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/personality#EffectSizeCategory"/>
+        <rdfs:comment>Categorizes the research effect size</rdfs:comment>
+        <rdfs:label>hasEffectSizeCategory</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#hasQuestion -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/personality#hasQuestion">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Assessment"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/personality#AssessmentQuestion"/>
+        <rdfs:comment>Links an assessment to its constituent questions</rdfs:comment>
+        <rdfs:label>hasQuestion</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#hasScore -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/personality#hasScore">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Assessment"/>
+        <rdfs:comment>Links an assessment to its calculated scores</rdfs:comment>
+        <rdfs:label>hasScore</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#measures -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/personality#measures">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#AssessmentQuestion"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/personality#PersonalityTrait"/>
+        <rdfs:comment>Indicates which personality trait a question assesses</rdfs:comment>
+        <rdfs:label>measures</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#predictsPerformanceIn -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/personality#predictsPerformanceIn">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#PersonalityTrait"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/personality#PerformanceDomain"/>
+        <rdfs:comment>Indicates which performance domains a trait predicts</rdfs:comment>
+        <rdfs:label>predictsPerformanceIn</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#predictsPerformanceInDomain -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/personality#predictsPerformanceInDomain">
+        <rdfs:range rdf:resource="http://www.semanticweb.org/personality#PerformanceDomain"/>
+        <rdfs:comment>Indicates which performance domain the prediction applies to</rdfs:comment>
+        <rdfs:label>predictsPerformanceInDomain</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#scoresOnTrait -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/personality#scoresOnTrait">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/personality#PersonalityTrait"/>
+        <rdfs:comment>Indicates which personality trait the score measures</rdfs:comment>
+        <rdfs:label>scoresOnTrait</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/personality#age -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#age">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Participant"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Age of participant in years</rdfs:comment>
+        <rdfs:label>age</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#categoryName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#categoryName">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#EffectSizeCategory"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Name of effect size category (Very Small, Small, Medium, Large, Very Large)</rdfs:comment>
+        <rdfs:label>categoryName</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#confidenceIntervalLower -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#confidenceIntervalLower">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Lower bound of 95% confidence interval for effect size</rdfs:comment>
+        <rdfs:label>confidenceIntervalLowerBound</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#confidenceIntervalUpper -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#confidenceIntervalUpper">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Upper bound of 95% confidence interval for effect size</rdfs:comment>
+        <rdfs:label>confidenceIntervalUpperBound</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#confidenceLevel -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#confidenceLevel">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Level of confidence in prediction (e.g., High, Medium, Low)</rdfs:comment>
+        <rdfs:label>confidenceLevel</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#correlationCoefficient -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#correlationCoefficient">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Effect size (ρ) used for prediction from meta-analytic research</rdfs:comment>
+        <rdfs:label>correlationCoefficient</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#country -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#country">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Participant"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Country of participant determined by technical information</rdfs:comment>
+        <rdfs:label>country</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#domainDescription -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#domainDescription">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#PerformanceDomain"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Description of what the performance domain measures</rdfs:comment>
+        <rdfs:label>domainDescription</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#domainName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#domainName">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#PerformanceDomain"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Name of the performance domain</rdfs:comment>
+        <rdfs:label>domainName</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#effectSize -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#effectSize">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Meta-analytic effect size measured as correlation coefficient (ρ)</rdfs:comment>
+        <rdfs:label>effectSize</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#endElapsedTime -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#endElapsedTime">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Assessment"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Time spent on finalization page in seconds (endelapse)</rdfs:comment>
+        <rdfs:label>endelapsedTime</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#gender -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#gender">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Participant"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Gender of participant</rdfs:comment>
+        <rdfs:label>gender</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#interpretationText -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#interpretationText">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Human-readable interpretation of the score</rdfs:comment>
+        <rdfs:label>interpretationText</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#introElapsedTime -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#introElapsedTime">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Assessment"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Time spent on landing/intro page in seconds (introelapse)</rdfs:comment>
+        <rdfs:label>introelapsedTime</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ipCount -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#ipCount">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Participant"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Number of records from participant&apos;s IP address in dataset (IPC)</rdfs:comment>
+        <rdfs:label>IPCount</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#isReverseCoded -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#isReverseCoded">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#AssessmentQuestion"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:comment>Indicates whether the question is reverse-scored</rdfs:comment>
+        <rdfs:label>isReverseCoded</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#maximumValue -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#maximumValue">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#EffectSizeCategory"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Maximum correlation value for this category</rdfs:comment>
+        <rdfs:label>maximumValue</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#meanScore -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#meanScore">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Average score across the 10 items for the trait</rdfs:comment>
+        <rdfs:label>meanScore</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#measurementType -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#measurementType">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#PerformanceDomain"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Type of measurement used (e.g., GPA, supervisor rating, test score)</rdfs:comment>
+        <rdfs:label>measurementType</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#minimumValue -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#minimumValue">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#EffectSizeCategory"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Minimum correlation value for this category</rdfs:comment>
+        <rdfs:label>minimumValue</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#name -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#name">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Participant"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#numberOfStudies -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#numberOfStudies">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Number of individual studies (k) included in meta-analysis</rdfs:comment>
+        <rdfs:label>numberOfStudies</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#participantID -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#participantID">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Participant"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Unique identifier for the participant</rdfs:comment>
+        <rdfs:label>participantID</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#percentileRank -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#percentileRank">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Percentile ranking (0-100) compared to normative sample</rdfs:comment>
+        <rdfs:label>percentileRank</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#predictionValue -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#predictionValue">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Predicted performance value based on trait-performance correlation</rdfs:comment>
+        <rdfs:label>predictionValue</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#publicationYear -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#publicationYear">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Year the research study was published</rdfs:comment>
+        <rdfs:label>publicationYear</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#questionID -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#questionID">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#AssessmentQuestion"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Unique identifier for the question (e.g., EXT1, AGR2)</rdfs:comment>
+        <rdfs:label>questionID</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#questionOrder -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#questionOrder">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#AssessmentQuestion"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>The order in which the question appears (1-50)</rdfs:comment>
+        <rdfs:label>questionOrder</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#questionText -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#questionText">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#AssessmentQuestion"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>The text content of the assessment question</rdfs:comment>
+        <rdfs:label>questionText</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#rawScore -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#rawScore">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Sum of responses before any transformations (accounting for reverse-coding)</rdfs:comment>
+        <rdfs:label>rawScore</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#responseTimeMs -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#responseTimeMs">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#AssessmentQuestion"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Time taken to answer the question in milliseconds</rdfs:comment>
+        <rdfs:label>responseTimeInMilliseconds</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#responseValue -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#responseValue">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#AssessmentQuestion"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>The response value on Likert scale (1=Disagree, 3=Neutral, 5=Agree)</rdfs:comment>
+        <rdfs:label>responseValue</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#sampleSize -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#sampleSize">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Total number of participants (N) included in meta-analysis</rdfs:comment>
+        <rdfs:label>sampleSize</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#scoreValue -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#scoreValue">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Numerical value of the calculated score</rdfs:comment>
+        <rdfs:label>scoreValue</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#screenHeight -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#screenHeight">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Assessment"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Height of participant&apos;s screen in pixels (screenh)</rdfs:comment>
+        <rdfs:label>screenHeight</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#screenWidth -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#screenWidth">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Assessment"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Width of participant&apos;s screen in pixels (screenw)</rdfs:comment>
+        <rdfs:label>screenWidth</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#standardizedScore -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#standardizedScore">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Normalized score (z-score) based on population norms</rdfs:comment>
+        <rdfs:label>standardizedScore</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#studyAuthor -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#studyAuthor">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Primary author(s) of the research study</rdfs:comment>
+        <rdfs:label>studyAuthor</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#totalElapsedTime -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#totalElapsedTime">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#Assessment"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment>Total time spent completing assessment in seconds (testelapse)</rdfs:comment>
+        <rdfs:label>totalElapsedTime</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#traitDescription -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#traitDescription">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#PersonalityTrait"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Detailed description of the personality trait characteristics</rdfs:comment>
+        <rdfs:label>traitDescription</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#traitLevel -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#traitLevel">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#PersonalityTrait"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>Categorization of trait level (e.g., Low, Medium, High)</rdfs:comment>
+        <rdfs:label>traitLevel</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#traitScore -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/personality#traitScore">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/personality#PersonalityTrait"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>Calculated aggregate score for the personality trait</rdfs:comment>
+        <rdfs:label>traitScore</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AcademicPerformance -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#AcademicPerformance">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/personality#PerformanceDomain"/>
+        <rdfs:comment>Performance measured by GPA and course grades</rdfs:comment>
+        <rdfs:label>AcademicPerformance</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Agreeableness -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#Agreeableness">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/personality#PersonalityTrait"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Assessment -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#Assessment">
+        <rdfs:comment>A completed personality test instance</rdfs:comment>
+        <rdfs:label>Assessment</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AssessmentQuestion -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#AssessmentQuestion">
+        <rdfs:comment>A survey item used to measure personality traits</rdfs:comment>
+        <rdfs:label>AssessmentQuestion</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Conscientiousness -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#Conscientiousness">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/personality#PersonalityTrait"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EffectSizeCategory -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#EffectSizeCategory">
+        <rdfs:comment>Classification of effect sizes based on research standards</rdfs:comment>
+        <rdfs:label>EffectSizeCategory</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Extraversion -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#Extraversion">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/personality#PersonalityTrait"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#JobPerformance -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#JobPerformance">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/personality#PerformanceDomain"/>
+        <rdfs:comment>Performance in workplace settings including overall job effectiveness</rdfs:comment>
+        <rdfs:label>JobPerformance</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#NegativelyKeyedQuestion -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#NegativelyKeyedQuestion">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/personality#AssessmentQuestion"/>
+        <rdfs:comment>Question where agreement indicates lower trait level (reverse-scored)</rdfs:comment>
+        <rdfs:label>NegativelyKeyedQuestion</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Neuroticism -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#Neuroticism">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/personality#PersonalityTrait"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Openness -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#Openness">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/personality#PersonalityTrait"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Participant -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#Participant">
+        <rdfs:comment>An individual who completes a personality assessment</rdfs:comment>
+        <rdfs:label>Participant</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#PerformanceDomain -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#PerformanceDomain">
+        <rdfs:comment>An area where personality-performance relationships are measured</rdfs:comment>
+        <rdfs:label>PerformanceDomain</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#PersonalityTrait -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#PersonalityTrait">
+        <rdfs:comment>A characteristic pattern of thinking, feeling, and behaving</rdfs:comment>
+        <rdfs:label>PersonalityTrait</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#PositivelyKeyedQuestion -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#PositivelyKeyedQuestion">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/personality#AssessmentQuestion"/>
+        <rdfs:comment>Question where agreement indicates higher trait level</rdfs:comment>
+        <rdfs:label>PositivelyKeyedQuestion</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ResearchStudy -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#ResearchStudy">
+        <rdfs:comment>Meta-analytic research examining personality-performance relationships</rdfs:comment>
+        <rdfs:label>ResearchStudy</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#TraitScore -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/personality#TraitScore">
+        <rdfs:comment>Calculated score for a specific Big Five personality trait based on responses</rdfs:comment>
+        <rdfs:label>TraitScore</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AGR1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AGR1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>AGR1</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">21</questionOrder>
+        <questionText>I feel little concern for others.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AGR10 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AGR10">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>AGR10</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</questionOrder>
+        <questionText>I make people feel at ease.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AGR2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AGR2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>AGR2</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">22</questionOrder>
+        <questionText>I am interested in people.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AGR3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AGR3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>AGR3</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">23</questionOrder>
+        <questionText>I insult people.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AGR4 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AGR4">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>AGR4</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">24</questionOrder>
+        <questionText>I sympathize with others&apos; feelings.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AGR5 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AGR5">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>AGR5</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</questionOrder>
+        <questionText>I am not interested in other people&apos;s problems.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AGR6 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AGR6">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>AGR6</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">26</questionOrder>
+        <questionText>I have a soft heart.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AGR7 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AGR7">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>AGR7</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">27</questionOrder>
+        <questionText>I am not really interested in others.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AGR8 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AGR8">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>AGR8</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">28</questionOrder>
+        <questionText>I take time out for others.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AGR9 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AGR9">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>AGR9</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">29</questionOrder>
+        <questionText>I feel others&apos; emotions.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AcademicPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AcademicPerf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#AcademicPerformance"/>
+        <rdfs:comment>Measured by GPA and course grades at primary, secondary, and tertiary levels</rdfs:comment>
+        <rdfs:label>AcademicPerformanceDomain</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Agreeableness -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Agreeableness"/>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AgreeablenessAcademicPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AgreeablenessAcademicPerf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <focusesOnDomain rdf:resource="http://www.semanticweb.org/personality#AcademicPerf"/>
+        <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.07</effectSize>
+        <rdfs:comment>Small positive correlation between agreeableness and academic performance</rdfs:comment>
+        <rdfs:label>AgreeablenessAcademicPerformanceStudy</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AgreeablenessEmotionalIntel -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AgreeablenessEmotionalIntel">
+        <examines rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <focusesOnDomain rdf:resource="http://www.semanticweb.org/personality#EmotionalIntelPerf"/>
+        <hasEffectSizeCategory rdf:resource="http://www.semanticweb.org/personality#MediumEffect"/>
+        <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.21</effectSize>
+        <rdfs:comment>Medium positive correlation - agreeableness has strongest effect on emotional intelligence</rdfs:comment>
+        <rdfs:label>agreeablenessEmotionalIntelligenceStudy</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AgreeablenessJobPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AgreeablenessJobPerf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <focusesOnDomain rdf:resource="http://www.semanticweb.org/personality#JobPerf"/>
+        <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.11</effectSize>
+        <rdfs:comment>Small positive correlation between agreeableness and job performance</rdfs:comment>
+        <rdfs:label>agreeablenessJobPerformanceStudy</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#AgreeablenessTrait -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#AgreeablenessTrait">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <predictsPerformanceIn rdf:resource="http://www.semanticweb.org/personality#EmotionalIntelPerf"/>
+        <predictsPerformanceIn rdf:resource="http://www.semanticweb.org/personality#JobPerf"/>
+        <traitDescription>Agreeableness reflects trust, altruism, compliance, and modesty. Benefits in performance come via ability to manage conflict and aversive situations, thus avoiding counterproductive behaviors. Particularly important in interpersonal settings.</traitDescription>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#CSN1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#CSN1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>CSN1</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">31</questionOrder>
+        <questionText>I am always prepared.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#CSN10 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#CSN10">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>CSN10</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">40</questionOrder>
+        <questionText>I am exacting in my work.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#CSN2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#CSN2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>CSN2</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">32</questionOrder>
+        <questionText>I leave my belongings around.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#CSN3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#CSN3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>CSN3</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">33</questionOrder>
+        <questionText>I pay attention to details.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#CSN4 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#CSN4">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>CSN4</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">34</questionOrder>
+        <questionText>I make a mess of things.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#CSN5 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#CSN5">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>CSN5</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">35</questionOrder>
+        <questionText>I get chores done right away.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#CSN6 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#CSN6">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>CSN6</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">36</questionOrder>
+        <questionText>I often forget to put things back in their proper place.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#CSN7 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#CSN7">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>CSN7</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">37</questionOrder>
+        <questionText>I like order.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#CSN8 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#CSN8">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>CSN8</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">38</questionOrder>
+        <questionText>I shirk my duties.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#CSN9 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#CSN9">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>CSN9</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">39</questionOrder>
+        <questionText>I follow a schedule.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Conscientiousness -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Conscientiousness"/>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ConscientiousnessAcademicPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ConscientiousnessAcademicPerf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <focusesOnDomain rdf:resource="http://www.semanticweb.org/personality#AcademicPerf"/>
+        <hasEffectSizeCategory rdf:resource="http://www.semanticweb.org/personality#LargeEffect"/>
+        <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.28</effectSize>
+        <rdfs:comment>Large positive correlation between conscientiousness and academic performance - strongest predictor</rdfs:comment>
+        <rdfs:label>conscientiousnessAcademicPerformanceStudy</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ConscientiousnessJobPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ConscientiousnessJobPerf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <focusesOnDomain rdf:resource="http://www.semanticweb.org/personality#JobPerf"/>
+        <hasEffectSizeCategory rdf:resource="http://www.semanticweb.org/personality#MediumEffect"/>
+        <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.2</effectSize>
+        <rdfs:comment>Medium positive correlation between conscientiousness and job performance</rdfs:comment>
+        <rdfs:label>conscientiousnessJobPerformanceStudy</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ConscientiousnessTrait -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ConscientiousnessTrait">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <predictsPerformanceIn rdf:resource="http://www.semanticweb.org/personality#AcademicPerf"/>
+        <predictsPerformanceIn rdf:resource="http://www.semanticweb.org/personality#JobPerf"/>
+        <traitDescription>Conscientiousness reflects order, dutifulness, achievement-striving, self-discipline, and deliberation. Benefits come via enhanced work ethic and self-control. Most robust predictor of performance across domains, especially strong in academic settings where it helps maintain focus even on low-interest tasks.</traitDescription>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#CreativePerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#CreativePerf">
+        <rdfs:comment>Performance in creative and innovative tasks</rdfs:comment>
+        <rdfs:label>creativityPerformanceDomain</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EST1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EST1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EST1</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">11</questionOrder>
+        <questionText>I get stressed out easily.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EST10 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EST10">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EST10</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</questionOrder>
+        <questionText>I often feel blue.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EST2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EST2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>EST2</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</questionOrder>
+        <questionText>I am relaxed most of the time.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EST3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EST3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EST3</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">13</questionOrder>
+        <questionText>I worry about things.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EST4 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EST4">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>EST4</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">14</questionOrder>
+        <questionText>I seldom feel blue.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EST5 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EST5">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EST5</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</questionOrder>
+        <questionText>I am easily disturbed.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EST6 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EST6">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EST6</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">16</questionOrder>
+        <questionText>I get upset easily.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EST7 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EST7">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EST7</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">17</questionOrder>
+        <questionText>I change my mood a lot.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EST8 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EST8">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EST8</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">18</questionOrder>
+        <questionText>I have frequent mood swings.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EST9 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EST9">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EST9</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19</questionOrder>
+        <questionText>I get irritated easily.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EXT1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EXT1</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</questionOrder>
+        <questionText>I am the life of the party.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EXT10 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT10">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>EXT10</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</questionOrder>
+        <questionText>I am quiet around strangers.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EXT2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>EXT2</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</questionOrder>
+        <questionText>I don&apos;t talk a lot.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EXT3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EXT3</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</questionOrder>
+        <questionText>I feel comfortable around people.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EXT4 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT4">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>EXT4</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</questionOrder>
+        <questionText>I keep in the background.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EXT5 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT5">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EXT5</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</questionOrder>
+        <questionText>I start conversations.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EXT6 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT6">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>EXT6</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">6.0</questionOrder>
+        <questionText>I have little to say.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EXT7 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT7">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EXT7</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</questionOrder>
+        <questionText>I talk to a lot of different people at parties.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EXT8 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT8">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>EXT8</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</questionOrder>
+        <questionText>I don&apos;t like to draw attention to myself.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EXT9 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT9">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>EXT9</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</questionOrder>
+        <questionText>I don&apos;t mind being the center of attention.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#EmotionalIntelPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EmotionalIntelPerf">
+        <rdfs:comment>Ability-based emotional intelligence assessment performance</rdfs:comment>
+        <rdfs:label>emotionalIntelligenceDomain</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ExampleAcademicPrediction -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExampleAcademicPrediction">
+        <basedOnTraitScore rdf:resource="http://www.semanticweb.org/personality#ExampleConscientiousnessScore"/>
+        <predictsPerformanceInDomain rdf:resource="http://www.semanticweb.org/personality#AcademicPerf"/>
+        <confidenceLevel>High</confidenceLevel>
+        <correlationCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.28</correlationCoefficient>
+        <interpretationText>Based on your high conscientiousness (ρ=0.28), you are predicted to perform well in academic settings. Conscientiousness is the strongest predictor of academic success.</interpretationText>
+        <predictionValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.336</predictionValue>
+        <rdfs:label>exampleAcademicPerformancePrediction</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ExampleAgreeablenessScore -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExampleAgreeablenessScore">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <scoresOnTrait rdf:resource="http://www.semanticweb.org/personality#AgreeablenessTrait"/>
+        <interpretationText>Moderate to high agreeableness - you are generally cooperative and compassionate</interpretationText>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3.8</meanScore>
+        <percentileRank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">76</percentileRank>
+        <rawScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">38.0</rawScore>
+        <standardizedScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.7</standardizedScore>
+        <rdfs:label>exampleAgreeablenessScore</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ExampleConscientiousnessScore -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExampleConscientiousnessScore">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <scoresOnTrait rdf:resource="http://www.semanticweb.org/personality#ConscientiousnessTrait"/>
+        <interpretationText>High conscientiousness - you are highly organized, reliable, and achievement-oriented</interpretationText>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.2</meanScore>
+        <percentileRank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">88</percentileRank>
+        <rawScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">42.0</rawScore>
+        <standardizedScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.2</standardizedScore>
+        <rdfs:label>exampleConscientiousnessScore</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ExampleCreativityPrediction -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExampleCreativityPrediction">
+        <basedOnTraitScore rdf:resource="http://www.semanticweb.org/personality#ExampleOpennessScore"/>
+        <predictsPerformanceInDomain rdf:resource="http://www.semanticweb.org/personality#CreativePerf"/>
+        <confidenceLevel>Medium</confidenceLevel>
+        <correlationCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.16</correlationCoefficient>
+        <interpretationText>Your high openness (ρ=0.16) suggests strong potential for creative performance. Your curiosity and willingness to explore unconventional ideas are assets.</interpretationText>
+        <predictionValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.144</predictionValue>
+        <rdfs:label>exampleCreativityPerformancePrediction</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ExampleEmotionalIntelligencePrediction -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExampleEmotionalIntelligencePrediction">
+        <basedOnTraitScore rdf:resource="http://www.semanticweb.org/personality#ExampleAgreeablenessScore"/>
+        <predictsPerformanceInDomain rdf:resource="http://www.semanticweb.org/personality#EmotionalIntelPerf"/>
+        <confidenceLevel>Medium</confidenceLevel>
+        <correlationCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.21</correlationCoefficient>
+        <interpretationText>Your agreeableness level (ρ=0.21) is the strongest predictor of emotional intelligence performance. Your empathy and interpersonal skills are likely strengths.</interpretationText>
+        <predictionValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.147</predictionValue>
+        <rdfs:label>exampleEmotionalIntelligencePrediction</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ExampleExtraversionScore -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExampleExtraversionScore">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <scoresOnTrait rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <interpretationText>Moderate to high extraversion - you tend to be sociable and outgoing</interpretationText>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3.5</meanScore>
+        <percentileRank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">69</percentileRank>
+        <rawScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">35.0</rawScore>
+        <standardizedScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.5</standardizedScore>
+        <rdfs:label>exampleExtraversionScore</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ExampleJobPrediction -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExampleJobPrediction">
+        <basedOnTraitScore rdf:resource="http://www.semanticweb.org/personality#ExampleConscientiousnessScore"/>
+        <predictsPerformanceInDomain rdf:resource="http://www.semanticweb.org/personality#JobPerf"/>
+        <confidenceLevel>Medium</confidenceLevel>
+        <correlationCoefficient rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.2</correlationCoefficient>
+        <interpretationText>Your conscientiousness level (ρ=0.20) suggests good potential for job performance. Combined with moderate extraversion (ρ=0.14), you have positive indicators for workplace success.</interpretationText>
+        <predictionValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.24</predictionValue>
+        <rdfs:label>exampleJobPerformancePrediction</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ExampleNeuroticismScore -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExampleNeuroticismScore">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <scoresOnTrait rdf:resource="http://www.semanticweb.org/personality#NeuroticismTrait"/>
+        <interpretationText>Low to moderate neuroticism (high emotional stability) - you tend to be calm and emotionally stable</interpretationText>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">2.5</meanScore>
+        <percentileRank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">38</percentileRank>
+        <rawScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">25.0</rawScore>
+        <standardizedScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-0.3</standardizedScore>
+        <rdfs:label>exampleNeuroticismScore</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ExampleOpennessScore -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExampleOpennessScore">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <scoresOnTrait rdf:resource="http://www.semanticweb.org/personality#OpennessTrait"/>
+        <interpretationText>High openness - you are intellectually curious, creative, and open to new experiences</interpretationText>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4.0</meanScore>
+        <percentileRank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">82</percentileRank>
+        <rawScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">40.0</rawScore>
+        <standardizedScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.9</standardizedScore>
+        <rdfs:label>exampleOpennessScore</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Extraversion -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Extraversion"/>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ExtraversionAcademicPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExtraversionAcademicPerf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
+        <focusesOnDomain rdf:resource="http://www.semanticweb.org/personality#AcademicPerf"/>
+        <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-0.01</effectSize>
+        <rdfs:comment>Negligible correlation between extraversion and academic performance</rdfs:comment>
+        <rdfs:label>extraversionAcademicPerformanceStudy</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ExtraversionJobPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExtraversionJobPerf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
+        <focusesOnDomain rdf:resource="http://www.semanticweb.org/personality#JobPerf"/>
+        <hasEffectSizeCategory rdf:resource="http://www.semanticweb.org/personality#SmallEffect"/>
+        <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.14</effectSize>
+        <rdfs:comment>Small positive correlation between extraversion and job performance</rdfs:comment>
+        <rdfs:label>extraversionJobPerformanceStudy</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ExtraversionTrait -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExtraversionTrait">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
+        <predictsPerformanceIn rdf:resource="http://www.semanticweb.org/personality#JobPerf"/>
+        <predictsPerformanceIn rdf:resource="http://www.semanticweb.org/personality#LeaderPerf"/>
+        <traitDescription>Extraversion encompasses warmth, gregariousness, assertiveness, activity, and positive emotion. Benefits in performance come via increased assertiveness, positive emotions, and activity levels, particularly important in interpersonal work settings.</traitDescription>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#JobPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#JobPerf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#JobPerformance"/>
+        <rdfs:comment>Overall workplace effectiveness and proficiency</rdfs:comment>
+        <rdfs:label>jobPerformanceDomain</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#LargeEffect -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#LargeEffect">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#EffectSizeCategory"/>
+        <categoryName>Large</categoryName>
+        <maximumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.39</maximumValue>
+        <minimumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.3</minimumValue>
+        <rdfs:comment>Effect size of 0.30 (Funder &amp; Ozer, 2019; Gignac &amp; Szordorai, 2016)</rdfs:comment>
+        <rdfs:label>largeEffectSize</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#LeaderPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#LeaderPerf">
+        <rdfs:comment>Leadership effectiveness and management performance</rdfs:comment>
+        <rdfs:label>leadershipPerformanceDomain</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#MediumEffect -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#MediumEffect">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#EffectSizeCategory"/>
+        <categoryName>Medium</categoryName>
+        <maximumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.29</maximumValue>
+        <minimumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.2</minimumValue>
+        <rdfs:comment>Effect size of 0.20 (Funder &amp; Ozer, 2019; Gignac &amp; Szordorai, 2016)</rdfs:comment>
+        <rdfs:label>mediumEffectSize</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Neuroticism -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Neuroticism"/>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#NeuroticismAcademicPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#NeuroticismAcademicPerf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <focusesOnDomain rdf:resource="http://www.semanticweb.org/personality#AcademicPerf"/>
+        <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-0.03</effectSize>
+        <rdfs:comment>Negligible negative correlation between neuroticism and academic performance</rdfs:comment>
+        <rdfs:label>neuroticismAcademicPerformanceStudy</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#NeuroticismJobPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#NeuroticismJobPerf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <focusesOnDomain rdf:resource="http://www.semanticweb.org/personality#JobPerf"/>
+        <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-0.15</effectSize>
+        <rdfs:comment>Small negative correlation between neuroticism and job performance</rdfs:comment>
+        <rdfs:label>neuroticismJobPerformanceStudy</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#NeuroticismTrait -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#NeuroticismTrait">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <predictsPerformanceIn rdf:resource="http://www.semanticweb.org/personality#JobPerf"/>
+        <traitDescription>Neuroticism (or low emotional stability) reflects anxiety, hostility, depression, self-consciousness, and vulnerability. Low neuroticism benefits performance via increased motivation and self-efficacy. More important in work settings than academic contexts.</traitDescription>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OPN1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OPN1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>OPN1</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">41</questionOrder>
+        <questionText>I have a rich vocabulary.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OPN10 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OPN10">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>OPN10</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</questionOrder>
+        <questionText>I am full of ideas.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OPN2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OPN2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>OPN2</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">42</questionOrder>
+        <questionText>I have difficulty understanding abstract ideas.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OPN3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OPN3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>OPN3</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">43</questionOrder>
+        <questionText>I have a vivid imagination.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OPN4 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OPN4">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>OPN4</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">44</questionOrder>
+        <questionText>I am not interested in abstract ideas.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OPN5 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OPN5">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>OPN5</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</questionOrder>
+        <questionText>I have excellent ideas.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OPN6 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OPN6">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
+        <questionID>OPN6</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">46</questionOrder>
+        <questionText>I do not have a good imagination.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OPN7 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OPN7">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>OPN7</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">47</questionOrder>
+        <questionText>I am quick to understand things.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OPN8 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OPN8">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>OPN8</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">48</questionOrder>
+        <questionText>I use difficult words.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OPN9 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OPN9">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
+        <questionID>OPN9</questionID>
+        <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">49</questionOrder>
+        <questionText>I spend time reflecting on things.</questionText>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Openness -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Openness"/>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OpennessAcademicPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OpennessAcademicPerf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <focusesOnDomain rdf:resource="http://www.semanticweb.org/personality#AcademicPerf"/>
+        <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.14</effectSize>
+        <rdfs:comment>Small positive correlation between openness and academic performance</rdfs:comment>
+        <rdfs:label>opennessAcademicPerformanceStudy</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OpennessCreativity -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OpennessCreativity">
+        <examines rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <focusesOnDomain rdf:resource="http://www.semanticweb.org/personality#CreativePerf"/>
+        <hasEffectSizeCategory rdf:resource="http://www.semanticweb.org/personality#SmallEffect"/>
+        <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.16</effectSize>
+        <rdfs:comment>Small-to-medium positive correlation between openness and creative performance</rdfs:comment>
+        <rdfs:label>opennessCreativityStudy</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OpennessJobPerf -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OpennessJobPerf">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <focusesOnDomain rdf:resource="http://www.semanticweb.org/personality#JobPerf"/>
+        <effectSize rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.11</effectSize>
+        <rdfs:comment>Small positive correlation between openness and job performance</rdfs:comment>
+        <rdfs:label>opennessJobPerformanceStudy</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OpennessTrait -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OpennessTrait">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <predictsPerformanceIn rdf:resource="http://www.semanticweb.org/personality#AcademicPerf"/>
+        <predictsPerformanceIn rdf:resource="http://www.semanticweb.org/personality#CreativePerf"/>
+        <traitDescription>Openness reflects curiosity, creativity, resourcefulness, and willingness to consider unconventional ideas. Benefits come via interest in intellectual, imaginative, and creative pursuits. Particularly important in intellectual and creative performance contexts.</traitDescription>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#OverallPerformanceStudy -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#OverallPerformanceStudy">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Agreeableness"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Conscientiousness"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Neuroticism"/>
+        <examines rdf:resource="http://www.semanticweb.org/personality#Openness"/>
+        <numberOfStudies rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2028</numberOfStudies>
+        <sampleSize rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">554778</sampleSize>
+        <rdfs:label>overallPerformanceMetaAnalysis</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Score_rag1_Agreeableness -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Score_rag1_Agreeableness">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.0</meanScore>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Score_rag1_Conscientiousness -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Score_rag1_Conscientiousness">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.1</meanScore>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Score_rag1_Extraversion -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Score_rag1_Extraversion">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</meanScore>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Score_rag1_Neuroticism -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Score_rag1_Neuroticism">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.6</meanScore>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Score_rag1_Openness -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Score_rag1_Openness">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.2</meanScore>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Score_um1_Agreeableness -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Score_um1_Agreeableness">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.8</meanScore>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Score_um1_Conscientiousness -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Score_um1_Conscientiousness">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">3.1</meanScore>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Score_um1_Extraversion -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Score_um1_Extraversion">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</meanScore>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Score_um1_Neuroticism -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Score_um1_Neuroticism">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.7</meanScore>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#Score_um1_Openness -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#Score_um1_Openness">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
+        <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.6</meanScore>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#SmallEffect -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#SmallEffect">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#EffectSizeCategory"/>
+        <categoryName>Small</categoryName>
+        <maximumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.19</maximumValue>
+        <minimumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.1</minimumValue>
+        <rdfs:comment>Effect size of 0.10 (Funder &amp; Ozer, 2019; Gignac &amp; Szordorai, 2016)</rdfs:comment>
+        <rdfs:label>smallEffectSize</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#VeryLargeEffect -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#VeryLargeEffect">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#EffectSizeCategory"/>
+        <categoryName>Very Large</categoryName>
+        <maximumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</maximumValue>
+        <minimumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.4</minimumValue>
+        <rdfs:comment>Effect size of 0.40 or greater (Funder &amp; Ozer, 2019; Gignac &amp; Szordorai, 2016)</rdfs:comment>
+        <rdfs:label>veryLargeEffectSize</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#VerySmallEffect -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#VerySmallEffect">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#EffectSizeCategory"/>
+        <categoryName>Very Small</categoryName>
+        <maximumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.05</maximumValue>
+        <minimumValue rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</minimumValue>
+        <rdfs:comment>Effect size of 0.05 or less (Funder &amp; Ozer, 2019; Gignac &amp; Szordorai, 2016)</rdfs:comment>
+        <rdfs:label>verySmallEffectSize</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#ZellLesick2022 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ZellLesick2022">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#ResearchStudy"/>
+        <numberOfStudies rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">54</numberOfStudies>
+        <publicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2022</publicationYear>
+        <rdfs:comment>Comprehensive synthesis of 50+ meta-analyses examining Big Five and performance</rdfs:comment>
+        <rdfs:label>zellAndLesick2022MetaSynthesis</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#[&apos;raghib&apos;] -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#[&apos;raghib&apos;]">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#Participant"/>
+        <participantID>rag1</participantID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/personality#[&apos;umar&apos;] -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#[&apos;umar&apos;]">
+        <rdf:type rdf:resource="http://www.semanticweb.org/personality#Participant"/>
+        <participantID>um1</participantID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotations
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description rdf:about="http://www.semanticweb.org/personality#Agreeableness">
+        <rdfs:comment>Reflects trust, altruism, compliance, and modesty</rdfs:comment>
+        <rdfs:label>agreeableness</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.semanticweb.org/personality#Conscientiousness">
+        <rdfs:comment>Reflects order, dutifulness, achievement-striving, self-discipline, and deliberation</rdfs:comment>
+        <rdfs:label>conscientiousness</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.semanticweb.org/personality#Extraversion">
+        <rdfs:comment>Reflects qualities such as warmth, gregariousness, assertiveness, activity, and positive emotion</rdfs:comment>
+        <rdfs:label>extraversion</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.semanticweb.org/personality#Neuroticism">
+        <rdfs:comment>Reflects anxiety, hostility, depression, self-consciousness, and vulnerability (also measured as Emotional Stability)</rdfs:comment>
+        <rdfs:label>neuroticism</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.semanticweb.org/personality#Openness">
+        <rdfs:comment>Reflects curiosity, creativity, resourcefulness, and willingness to consider unconventional ideas</rdfs:comment>
+        <rdfs:label>openness</rdfs:label>
+    </rdf:Description>
 </rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->
+
