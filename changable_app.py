@@ -148,21 +148,9 @@ def submit_assessment():
             assessment.completedBy = [participant]
 
             # Save Performance Scores
-            # Ensuring properties exist before assigning
-            if not hasattr(onto, "jobPerformance"):
-                print("⚠ Creating missing property: jobPerformance")
-                class jobPerformance(DataProperty):
-                    domain = [onto.Participant]
-                    range = [float]
             
-            if not hasattr(onto, "academicPerformanceScore"):
-                print("⚠ Creating missing property: academicPerformanceScore")
-                class academicPerformanceScore(DataProperty):
-                    domain = [onto.Participant]
-                    range = [float]
-            
-            participant.jobPerformanceScore = [perf_scores["JobPerformance"]]
-            participant.academicPerformanceScore = [perf_scores["AcademicPerformance"]]
+            participant.jobPerformance = [perf_scores["JobPerformance"]]
+            participant.academicPerformance = [perf_scores["AcademicPerformance"]]
 
             # Save Trait Scores
             for trait, value in final_scores.items():
