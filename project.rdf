@@ -1328,7 +1328,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT1">
         <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
-        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
         <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
         <questionID>EXT1</questionID>
         <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</questionOrder>
@@ -1341,7 +1341,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT10">
         <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
-        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
         <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
         <questionID>EXT10</questionID>
         <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</questionOrder>
@@ -1354,7 +1354,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT2">
         <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
-        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
         <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
         <questionID>EXT2</questionID>
         <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</questionOrder>
@@ -1367,7 +1367,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT3">
         <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
-        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
         <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
         <questionID>EXT3</questionID>
         <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</questionOrder>
@@ -1380,7 +1380,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT4">
         <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
-        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
         <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
         <questionID>EXT4</questionID>
         <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</questionOrder>
@@ -1393,7 +1393,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT5">
         <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
-        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
         <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
         <questionID>EXT5</questionID>
         <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</questionOrder>
@@ -1406,7 +1406,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT6">
         <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
-        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
         <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
         <questionID>EXT6</questionID>
         <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">6.0</questionOrder>
@@ -1419,7 +1419,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT7">
         <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
-        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
         <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
         <questionID>EXT7</questionID>
         <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</questionOrder>
@@ -1432,7 +1432,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT8">
         <rdf:type rdf:resource="http://www.semanticweb.org/personality#NegativelyKeyedQuestion"/>
-        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
         <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isReverseCoded>
         <questionID>EXT8</questionID>
         <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</questionOrder>
@@ -1445,7 +1445,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#EXT9">
         <rdf:type rdf:resource="http://www.semanticweb.org/personality#PositivelyKeyedQuestion"/>
-        <measures rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <measures rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
         <isReverseCoded rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isReverseCoded>
         <questionID>EXT9</questionID>
         <questionOrder rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</questionOrder>
@@ -1539,7 +1539,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/personality#ExampleExtraversionScore">
         <rdf:type rdf:resource="http://www.semanticweb.org/personality#TraitScore"/>
-        <scoresOnTrait rdf:resource="http://www.semanticweb.org/personality#ExtraversionTrait"/>
+        <scoresOnTrait rdf:resource="http://www.semanticweb.org/personality#Extraversion"/>
         <interpretationText>Moderate to high extraversion - you tend to be sociable and outgoing</interpretationText>
         <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3.5</meanScore>
         <percentileRank rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">69</percentileRank>
@@ -2119,4 +2119,3 @@
 
 
 <!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->
-
