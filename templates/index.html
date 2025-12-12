@@ -611,6 +611,87 @@
             display: none !important;
         }
 
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: toastSlideIn 0.3s ease-out;
+            max-width: 350px;
+        }
+
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .toast.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .toast.info {
+            border-left: 4px solid #667eea;
+        }
+
+        .toast-icon {
+            font-size: 20px;
+        }
+
+        .toast-message {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: auto;
+            padding: 0;
+        }
+
+        .toast-close:hover {
+            color: #374151;
+        }
+
+        @keyframes toastSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes toastSlideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
         /* Responsive */
         @media (max-width: 640px) {
             .login-card, .assessment-card {
@@ -701,6 +782,9 @@
     </div>
 </div>
 
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
 <!-- Loading Overlay -->
 <div class="loading-overlay" id="loading-overlay">
     <div class="loading-spinner"></div>
@@ -750,9 +834,41 @@
 </div>
 
 <script>
+    // Constants
+    const AUTO_ADVANCE_DELAY_MS = 300;
+
+    // State
     let questionsMetaData = [];
     let currentQuestionIndex = 0;
     let answers = {};
+
+    // Utility: Escape HTML to prevent XSS
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Utility: Validate and clamp numeric score to 0-100 range
+    function validateScore(score) {
+        const num = parseFloat(score);
+        if (isNaN(num)) return 0;
+        return Math.max(0, Math.min(100, num));
+    }
+
+    // Utility: Sanitize markdown-like text (basic sanitization)
+    function sanitizeAnalysis(text) {
+        if (!text) return '';
+        // First escape HTML entities
+        let sanitized = escapeHtml(text);
+        // Then apply safe formatting (these are safe because we escaped first)
+        sanitized = sanitized
+            .replace(/\n/g, "<br>")
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+            .replace(/### (.*?)(&lt;br&gt;|<br>|$)/g, "<h3>$1</h3>")
+            .replace(/\* /g, "• ");
+        return sanitized;
+    }
 
     // Handle Login
     async function handleLogin() {
@@ -760,7 +876,7 @@
         const id = document.getElementById('userId').value.trim();
 
         if (!name || !id) {
-            showNotification('Please fill in all fields');
+            showNotification('Please fill in all fields', 'error');
             return;
         }
 
@@ -768,7 +884,7 @@
         await loadQuestions();
 
         if (questionsMetaData.length === 0) {
-            showNotification('No questions available. Please check if the server is running.');
+            showNotification('No questions available. Please check if the server is running.', 'error');
             return;
         }
 
@@ -787,7 +903,7 @@
             questionsMetaData = await response.json();
         } catch (error) {
             console.error("Error loading questions:", error);
-            showNotification('Could not load questions. Is the server running?');
+            showNotification('Could not load questions. Is the server running?', 'error');
         }
     }
 
@@ -819,7 +935,7 @@
                                    name="q_${question.id}" 
                                    id="q_${question.id}_${val}" 
                                    value="${val}"
-                                   ${selectedValue == val ? 'checked' : ''}
+                                   ${selectedValue === val ? 'checked' : ''}
                                    onchange="handleAnswer('${question.id}', ${val})">
                             <label class="rating-label" for="q_${question.id}_${val}">
                                 <span class="rating-number">${val}</span>
@@ -861,7 +977,7 @@
         if (currentQuestionIndex < questionsMetaData.length - 1) {
             setTimeout(() => {
                 nextQuestion();
-            }, 300);
+            }, AUTO_ADVANCE_DELAY_MS);
         }
     }
 
@@ -891,7 +1007,7 @@
         const currentQuestion = questionsMetaData[currentQuestionIndex];
 
         if (!answers[currentQuestion.id]) {
-            showNotification('Please select an answer before continuing');
+            showNotification('Please select an answer before continuing', 'info');
             return;
         }
 
@@ -930,13 +1046,13 @@
         } catch (error) {
             document.getElementById('loading-overlay').classList.remove('active');
             console.error(error);
-            showNotification('Error calculating scores. Please try again.');
+            showNotification('Error calculating scores. Please try again.', 'error');
         }
     }
 
     // Display Results in Modal
     function displayResults(result, userName) {
-        // Set greeting
+        // Set greeting (using textContent is safe for XSS)
         document.getElementById('user-greeting').textContent = 
             `Great job, ${userName}! Here's your personality profile.`;
 
@@ -945,13 +1061,15 @@
         scoresGrid.innerHTML = '';
 
         for (const [trait, score] of Object.entries(result.scores)) {
-            const numericScore = parseFloat(score);
+            const validatedScore = validateScore(score);
+            const escapedTrait = escapeHtml(trait);
+            const escapedScore = escapeHtml(String(score));
             scoresGrid.innerHTML += `
                 <div class="score-item">
-                    <div class="score-trait">${trait}</div>
-                    <div class="score-value">${score}</div>
+                    <div class="score-trait">${escapedTrait}</div>
+                    <div class="score-value">${escapedScore}</div>
                     <div class="score-bar-container">
-                        <div class="score-bar-fill" style="width: ${numericScore}%"></div>
+                        <div class="score-bar-fill" style="width: ${validatedScore}%"></div>
                     </div>
                 </div>
             `;
@@ -960,26 +1078,24 @@
         // Populate performance predictions
         const performanceGrid = document.getElementById('performance-grid');
         if (result.performance) {
+            const jobPerf = validateScore(result.performance.JobPerformance);
+            const acadPerf = validateScore(result.performance.AcademicPerformance);
             performanceGrid.innerHTML = `
                 <div class="performance-item">
                     <div class="performance-label">Job Performance</div>
-                    <div class="performance-value">${result.performance.JobPerformance}%</div>
+                    <div class="performance-value">${jobPerf}%</div>
                 </div>
                 <div class="performance-item">
                     <div class="performance-label">Academic Performance</div>
-                    <div class="performance-value">${result.performance.AcademicPerformance}%</div>
+                    <div class="performance-value">${acadPerf}%</div>
                 </div>
             `;
         }
 
-        // Populate AI analysis
+        // Populate AI analysis (sanitized)
         const analysisContent = document.getElementById('analysis-content');
         if (result.analysis) {
-            analysisContent.innerHTML = result.analysis
-                .replace(/\n/g, "<br>")
-                .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                .replace(/### (.*?)(<br>|$)/g, "<h3>$1</h3>")
-                .replace(/\* /g, "• ");
+            analysisContent.innerHTML = sanitizeAnalysis(result.analysis);
         } else {
             analysisContent.innerHTML = '<p>Analysis not available.</p>';
         }
@@ -1047,9 +1163,33 @@
         document.getElementById('userId').value = '';
     }
 
-    // Simple notification function
-    function showNotification(message) {
-        alert(message);
+    // Toast notification function
+    function showNotification(message, type = 'info') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icons = {
+            error: '❌',
+            success: '✅',
+            info: 'ℹ️'
+        };
+        
+        toast.innerHTML = `
+            <span class="toast-icon">${icons[type] || icons.info}</span>
+            <span class="toast-message">${escapeHtml(message)}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        `;
+        
+        container.appendChild(toast);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.style.animation = 'toastSlideOut 0.3s ease-out forwards';
+                setTimeout(() => toast.remove(), 300);
+            }
+        }, 5000);
     }
 </script>
 
