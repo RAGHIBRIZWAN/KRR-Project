@@ -18,6 +18,30 @@ try:
 except Exception as e:
     print(f"❌ CRITICAL ERROR: Could not load ontology. {e}")
 
+# ... existing code loading ontology ...
+try:
+    onto = get_ontology(ONTOLOGY_PATH).load()
+    print(f"✅ Ontology loaded from {ONTOLOGY_PATH}")
+except Exception as e:
+    print(f"❌ CRITICAL ERROR: Could not load ontology. {e}")
+
+# --- ADD THIS BLOCK: DEFINE MISSING PROPERTIES ---
+with onto:
+    # Property for Job Performance Score
+    class jobPerformance(DataProperty):
+        domain = [onto.Participant]
+        range = [float]
+        label = ["jobPerformance"]
+        comment = ["Calculated predicted score for Job Performance"]
+
+    # Property for Academic Performance Score
+    class academicPerformance(DataProperty):
+        domain = [onto.Participant]
+        range = [float]
+        label = ["academicPerformance"]
+        comment = ["Calculated predicted score for Academic Performance"]
+# -------------------------------------------------
+
 # --- HELPER FUNCTIONS ---
 
 def get_question_details(q):
@@ -74,7 +98,7 @@ def get_groq_suggestions(scores, name):
     try:
         chat_completion = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
-            model="llama3-8b-8192",
+            model="llama-3.3-70b-versatile",
         )
         return chat_completion.choices[0].message.content
     except Exception as e:
@@ -124,11 +148,25 @@ def submit_assessment():
             final_val = (6 - raw_val) if details['is_reverse'] else raw_val
             trait_totals[trait].append(final_val)
 
-    final_scores = {}
-    for t, values in trait_totals.items():
-        final_scores[t.capitalize()] = round(sum(values)/len(values), 2) if values else 0
+    final_scores = {}      # This will hold the Percentage (0-100)
+    raw_scores = {}        # This will hold the Raw (1-5) for calculations
 
-    perf_scores = calculate_performance_scores(final_scores)
+    for t, values in trait_totals.items():
+        trait_key = t.capitalize()
+        if values:
+            mean_val = sum(values)/len(values)
+            raw_scores[trait_key] = mean_val
+            # Normalize to Percentage: (Mean / 5) * 100
+            final_scores[trait_key] = round((mean_val / 5) * 100, 2)
+        else:
+            raw_scores[trait_key] = 0
+            final_scores[trait_key] = 0
+
+    # IMPORTANT: Pass 'raw_scores' (1-5 scale) to calculation function
+    # because it expects values where 3.0 is the neutral baseline.
+    perf_scores = calculate_performance_scores(raw_scores)
+    
+    # Suggestions can use the percentage scores (LLM understands both)
     suggestions = get_groq_suggestions(final_scores, user_name)
 
     # 2. SAVE TO ONTOLOGY
@@ -148,11 +186,12 @@ def submit_assessment():
             assessment.completedBy = [participant]
 
             # Save Performance Scores
-            
-            participant.jobPerformance = [perf_scores["JobPerformance"]]
-            participant.academicPerformance = [perf_scores["AcademicPerformance"]]
+            if "JobPerformance" in perf_scores:
+                participant.jobPerformance = [float(perf_scores["JobPerformance"])]
+            if "AcademicPerformance" in perf_scores:
+                participant.academicPerformance = [float(perf_scores["AcademicPerformance"])]
 
-            # Save Trait Scores
+            # Save Trait Scores (Now saving Percentages)
             for trait, value in final_scores.items():
                 ts = onto.TraitScore(f"Score_{user_id}_{trait}")
                 ts.meanScore = [value]
@@ -173,8 +212,8 @@ def submit_assessment():
         print(f"❌ ERROR SAVING ONTOLOGY: {str(e)}")
 
     return jsonify({
-        "scores": final_scores,
-        "performance": perf_scores,
+        "scores": final_scores,      # Returns Percentages to frontend
+        "performance": perf_scores,  # Returns 1-5 Score for performance
         "analysis": suggestions
     })
 
