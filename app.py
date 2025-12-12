@@ -5,155 +5,254 @@ from groq import Groq
 
 app = Flask(__name__)
 
-ONTOLOGY_PATH = "project.rdf"
-GROQ_API_KEY = "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"
+# --- CONFIGURATION ---
+ONTOLOGY_PATH = "project.rdf" 
+GROQ_API_KEY = "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" 
 
 client = Groq(api_key=GROQ_API_KEY)
 
-onto = get_ontology(ONTOLOGY_PATH).load()
+# Load ontology
+try:
+    onto = get_ontology(ONTOLOGY_PATH).load()
+    print(f"✅ Ontology loaded from {ONTOLOGY_PATH}")
+except Exception as e:
+    print(f"❌ CRITICAL ERROR: Could not load ontology. {e}")
 
-base_iri = "http://www.semanticweb.org/personality#"
+# ... existing code loading ontology ...
+try:
+    onto = get_ontology(ONTOLOGY_PATH).load()
+    print(f"✅ Ontology loaded from {ONTOLOGY_PATH}")
+except Exception as e:
+    print(f"❌ CRITICAL ERROR: Could not load ontology. {e}")
 
-def get_trait_name(trait_class_list):
-    """Helper to extract the string name of the trait from the ontology list"""
-    if not trait_class_list:
-        return "Unknown"
-    # owlready2 returns a list of entities. We grab the first one's name.
-    return trait_class_list[0].name
+# --- ADD THIS BLOCK: DEFINE MISSING PROPERTIES ---
+with onto:
+    # Property for Job Performance Score
+    class jobPerformance(DataProperty):
+        domain = [onto.Participant]
+        range = [float]
+        label = ["jobPerformance"]
+        comment = ["Calculated predicted score for Job Performance"]
+
+    # Property for Academic Performance Score
+    class academicPerformance(DataProperty):
+        domain = [onto.Participant]
+        range = [float]
+        label = ["academicPerformance"]
+        comment = ["Calculated predicted score for Academic Performance"]
+# -------------------------------------------------
+
+# --- HELPER FUNCTIONS ---
+
+def get_question_details(q):
+    """ Extract question info based on your ontology structure. """
+    text = "Question text missing"
+    if hasattr(q, "questionText") and q.questionText:
+        text = q.questionText[0]
+    elif hasattr(q, "hasText") and q.hasText:
+        text = q.hasText[0]
+    
+    q_id = q.name
+    if hasattr(q, "questionID") and q.questionID:
+        q_id = q.questionID[0]
+
+    trait_name = "Unknown"
+    if hasattr(q, "measures") and q.measures:
+        measured_entity = q.measures[0]
+        trait_name = measured_entity.name 
+
+    is_reverse = False
+    if hasattr(onto, "NegativelyKeyedQuestion") and isinstance(q, onto.NegativelyKeyedQuestion):
+        is_reverse = True
+    if not is_reverse and hasattr(q, "isReverseCoded") and q.isReverseCoded:
+        val = q.isReverseCoded[0]
+        if str(val).lower() == "true" or val is True:
+            is_reverse = True
+
+    return { "id": q_id, "text": text, "trait": trait_name, "is_reverse": is_reverse }
+
+def calculate_performance_scores(final_scores):
+    job_perf = 3.0
+    acad_perf = 3.0
+    scores_lower = {k.lower(): v for k, v in final_scores.items()}
+
+    weights = {
+        "JobPerformance": { "conscientiousness": 0.22, "neuroticism": -0.15, "extraversion": 0.10, "agreeableness": 0.08, "openness": 0.05 },
+        "AcademicPerformance": { "conscientiousness": 0.28, "agreeableness": 0.07, "openness": 0.15, "neuroticism": -0.10, "extraversion": 0.05 }
+    }
+
+    for trait, score in scores_lower.items():
+        deviation = score - 3.0
+        for w_trait, weight in weights["JobPerformance"].items():
+            if w_trait in trait: job_perf += deviation * weight
+        for w_trait, weight in weights["AcademicPerformance"].items():
+            if w_trait in trait: acad_perf += deviation * weight
+
+    return {
+        "JobPerformance": round(max(20, min(100, (job_perf/5)*100)), 2),
+        "AcademicPerformance": round(max(20, min(100, (acad_perf/5))*100), 2)
+    }
 
 def get_groq_suggestions(scores, name):
-    """Sends trait scores to Groq API for analysis."""
     prompt = f"""
-    Analyze the personality of {name} based on these Big Five scores (Range 1-5):
-    {scores}
-    
-    Provide a brief, supportive summary of their personality type and 3 actionable 
-    suggestions for personal or professional growth based on their unique profile.
+        Act as an expert Industrial-Organizational Psychologist and Personality Profiler. 
+        Analyze the personality of '{name}' based on the following Big Five trait scores (scale 0-100%):
+        {scores}
+
+        Your goal is to provide a deep, empathetic, and actionable analysis. 
+        Do not just list the traits one by one; analyze how they interact with each other.
+
+        Please structure your response in the following Markdown format:
+
+        ### 🧠 The Executive Summary
+        [A 2-3 sentence "elevator pitch" of their personality archetype. Give them a creative title, like "The Compassionate Architect" or "The Ambitious Driver".]
+
+        ### ⚡ Key Strengths (Superpowers)
+        * **[Strength 1]:** [Description based on high scoring traits]
+        * **[Strength 2]:** [Description]
+        * **[Strength 3]:** [Description]
+
+        ### ⚠️ Potential Blind Spots
+        [Discuss 2 specific challenges they might face, such as burnout, conflict avoidance, or disorganization, based on their specific score combinations.]
+
+        ### 💼 Performance & Work Style
+        * **Work Approach:** [How they handle tasks/deadlines]
+        * **Team Dynamics:** [How they interact with others]
+
+        ### 🚀 3 Tailored Growth Strategies
+        1.  **[Strategy 1]:** [Actionable advice]
+        2.  **[Strategy 2]:** [Actionable advice]
+        3.  **[Strategy 3]:** [Actionable advice]
     """
-    
     try:
         chat_completion = client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": "You are an expert personality psychologist."},
-                {"role": "user", "content": prompt}
-            ],
+            messages=[{"role": "user", "content": prompt}],
             model="llama-3.3-70b-versatile",
         )
         return chat_completion.choices[0].message.content
     except Exception as e:
-        return f"Error fetching suggestions from Groq: {str(e)}"
+        return f"Error getting suggestions: {str(e)}"
+
+# --- ROUTES ---
 
 @app.route('/')
-def home():
+def index():
     return render_template('index.html')
-
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.json
-    user_id = data.get('id')
-    user_name = data.get('name')
-    
-    # Search for existing participant
-    participant = onto.search_one(iri=f"*{user_id}")
-    
-    if participant:
-        # User exists: Fetch their data
-        # We assume the ontology links scores to the participant. 
-        # Since the provided snippet doesn't explicitly show 'hasScore' linking directly 
-        # from Participant in a simple way, we will search for TraitScore objects 
-        # that might be associated or just return a message saying they exist.
-        
-        # NOTE: Logic here depends on how you linked scores to participants in previous runs.
-        # For this example, we will just return a "Found" status and mock the retrieval 
-        # or regenerate suggestions if the scores aren't easily traversing back in this specific ontology version.
-        
-        return jsonify({
-            "status": "found",
-            "message": f"Welcome back, {participant.name[0] if participant.name else user_name}!",
-            "data": "User data retrieval would go here based on your specific object property links."
-        })
-    else:
-        return jsonify({"status": "new", "message": "User not found. Starting assessment."})
 
 @app.route('/get_questions', methods=['GET'])
 def get_questions():
     questions_data = []
-    
-    # Query all individuals of class AssessmentQuestion
-    # Note: Depending on owlready2 version, accessing instances might vary.
-    questions = onto.search(type=onto.AssessmentQuestion)
-    
-    for q in questions:
-        # Safely get properties. Owlready returns lists for properties.
-        q_text = q.questionText[0] if q.questionText else "No text"
-        q_id = q.questionID[0] if q.questionID else "NoID"
-        is_reverse = q.isReverseCoded[0] if q.isReverseCoded else False
-        
-        # Get the trait it measures
-        trait_measures = q.measures
-        trait_name = get_trait_name(trait_measures)
+    if not hasattr(onto, "AssessmentQuestion"): return jsonify([])
 
-        questions_data.append({
-            "id": q_id,
-            "text": q_text,
-            "trait": trait_name,
-            "reverse": is_reverse
-        })
+    for q in onto.AssessmentQuestion.instances():
+        try:
+            questions_data.append(get_question_details(q))
+        except: pass
+
+    # Sort
+    def sort_key(q):
+        try: return int(''.join(filter(str.isdigit, q['id'])))
+        except: return q['id']
+    questions_data.sort(key=sort_key)
     
-    # Sort by ID or Question Order usually desirable, here we send as is
     return jsonify(questions_data)
 
 @app.route('/submit_assessment', methods=['POST'])
 def submit_assessment():
     data = request.json
-    user_id = data.get('id')
-    user_name = data.get('name')
-    answers = data.get('answers') # Dict of {question_id: score}
-    questions_meta = data.get('meta') # We pass meta back to avoid re-querying
-    
-    # 1. Calculate Scores
-    scores = {
-        "Openness": [], "Conscientiousness": [], "Extraversion": [],
-        "Agreeableness": [], "Neuroticism": []
-    }
-    
-    for q_meta in questions_meta:
-        q_id = q_meta['id']
-        raw_val = int(answers.get(q_id, 3)) # Default to Neutral if missing
-        
-        # Reverse Scoring Logic
-        final_val = (6 - raw_val) if q_meta['reverse'] else raw_val
-        
-        trait = q_meta['trait']
-        if trait in scores:
-            scores[trait].append(final_val)
+    user_id = data.get('id', 'Unknown')
+    user_name = data.get('name', 'Anonymous')
+    answers = data.get('answers', {})
+
+    # 1. Calc Scores
+    trait_totals = {}
+    for q in onto.AssessmentQuestion.instances():
+        details = get_question_details(q)
+        q_id = details['id']
+        trait = details['trait'].lower()
+        if trait == "unknown": continue
+        if trait not in trait_totals: trait_totals[trait] = []
+        if q_id in answers:
+            raw_val = int(answers[q_id])
+            final_val = (6 - raw_val) if details['is_reverse'] else raw_val
+            trait_totals[trait].append(final_val)
+
+    # Dictionaries for different purposes
+    raw_scores = {}             # 1-5 Scale (For math/performance logic)
+    numeric_percentages = {}    # 0-100 Float (For Ontology storage)
+    formatted_scores = {}       # Strings with % (For Display/JSON)
+
+    for t, values in trait_totals.items():
+        trait_key = t.capitalize()
+        if values:
+            # Calculate raw mean (1-5)
+            mean_val = sum(values)/len(values)
+            raw_scores[trait_key] = mean_val
             
-    # Calculate Means
-    final_scores = {k: round(sum(v)/len(v), 2) if v else 0 for k, v in scores.items()}
+            # Calculate percentage (0-100)
+            pct_val = round((mean_val / 5) * 100, 2)
+            
+            numeric_percentages[trait_key] = pct_val
+            formatted_scores[trait_key] = f"{pct_val}%" 
+        else:
+            raw_scores[trait_key] = 0
+            numeric_percentages[trait_key] = 0.0
+            formatted_scores[trait_key] = "0%"
 
-    # 2. Update Ontology
-    with onto:
-        # Create Participant
-        # We use a unique IRI based on ID
-        participant = onto.Participant(f"Participant_{user_id}")
-        participant.participantID = [user_id]
-        participant.name = [user_name]
-        
-        # Create Trait Scores and Link (Simplified for demonstration)
-        for trait, value in final_scores.items():
-            score_ind = onto.TraitScore(f"Score_{user_id}_{trait}")
-            score_ind.meanScore = [value]
-            # Ideally you would link score_ind to participant here using an ObjectProperty
-            # e.g., participant.hasScore.append(score_ind) if that property exists in your schema
+    # IMPORTANT: Use raw_scores (1-5) for performance calculation
+    # This keeps your deviation logic (score - 3.0) mathematically correct
+    perf_scores = calculate_performance_scores(raw_scores)
     
-    # Save ontology (Optional: Be careful saving in production environments)
-    onto.save(file=ONTOLOGY_PATH)
+    # Use numeric percentages for the AI analysis
+    suggestions = get_groq_suggestions(numeric_percentages, user_name)
 
-    # 3. Get Groq Suggestions
-    suggestions = get_groq_suggestions(final_scores, user_name)
-    
+    # 2. SAVE TO ONTOLOGY
+    print(f"💾 Attempting to save data for user: {user_name}...")
+    try:
+        with onto:
+            # Create Participant
+            participant = onto.search_one(iri=f"*Participant_{user_id}")
+            if not participant:
+                participant = onto.Participant(f"Participant_{user_id}")
+            
+            participant.participantID = [user_id]
+            participant.name = [user_name]
+            
+            # Create Assessment
+            assessment = onto.Assessment(f"Assessment_{user_id}")
+            assessment.completedBy = [participant]
+
+            # Save Performance Scores (Float values)
+            if "JobPerformance" in perf_scores:
+                participant.jobPerformance = [float(perf_scores["JobPerformance"])]
+            if "AcademicPerformance" in perf_scores:
+                participant.academicPerformance = [float(perf_scores["AcademicPerformance"])]
+
+            # Save Trait Scores (Saving 0-100 Numbers, not strings)
+            # We save the number (e.g. 80.0) because the ontology expects 'decimal'
+            for trait, value in numeric_percentages.items():
+                ts = onto.TraitScore(f"Score_{user_id}_{trait}")
+                ts.meanScore = [value]
+                
+                # Link to Trait
+                trait_obj = onto.search_one(iri=f"*{trait}")
+                if trait_obj:
+                    ts.scoresOnTrait = [trait_obj]
+                
+                # Link to Assessment
+                assessment.hasScore.append(ts)
+
+        # FORCE SAVE
+        onto.save(file=ONTOLOGY_PATH)
+        print("✅ Data successfully saved to project.rdf")
+
+    except Exception as e:
+        print(f"❌ ERROR SAVING ONTOLOGY: {str(e)}")
+
+    # Return the FORMATTED strings (with %) to the user
     return jsonify({
-        "scores": final_scores,
+        "scores": formatted_scores,  # Shows "84.0%", "66.0%", etc.
+        "performance": perf_scores,
         "analysis": suggestions
     })
 
