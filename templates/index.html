@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Big Five Personality Assessment | Discover Your Unique Profile</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #6366f1;
@@ -820,7 +820,7 @@
 </div>
 
 <script>
-    const AUTO_ADVANCE_DELAY = 400;
+    const AUTO_ADVANCE_DELAY = 300;
     let questions = [];
     let currentIndex = 0;
     let answers = {};
@@ -914,7 +914,7 @@
                             <div class="rating-option">
                                 <input type="radio" name="q_${question.id}" id="q_${question.id}_${val}" value="${val}"
                                        ${selectedValue === val ? 'checked' : ''}
-                                       onchange="handleAnswer('${escapeHtml(question.id)}', ${val})">
+                                       onchange="handleAnswer('${question.id}', ${val})">
                                 <label class="rating-btn" for="q_${question.id}_${val}">${val}</label>
                             </div>
                         `).join('')}
