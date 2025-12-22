@@ -162,16 +162,18 @@ const Assessment = () => {
               <div className="progress-fill" style={{ width: `${progress}%` }} />
             </div>
           </div>
-          <button className="btn-secondary" style={{ marginTop: 12 }} onClick={() => window.location.assign('/assessment')}>
-            ← Change participant
-          </button>
-          <button className="btn-ghost" style={{ marginTop: 10 }} onClick={loadPrevious} disabled={!userId || loadingPrevious}>
-            {loadingPrevious ? 'Loading previous report…' : 'See previous report'}
-          </button>
+          <div className="sidebar-actions">
+            <button className="btn-secondary" onClick={() => window.location.assign('/assessment')}>
+              ← Change
+            </button>
+            <button className="btn-ghost" onClick={loadPrevious} disabled={!userId || loadingPrevious}>
+              {loadingPrevious ? 'Loading…' : 'History'}
+            </button>
+          </div>
         </div>
 
         {questions.length > 0 && (
-          <div className="assessment-card" style={{ marginTop: 20 }}>
+          <div className="assessment-card">
             <div id="question-container">{renderQuestion()}</div>
 
             <div className="nav-buttons">

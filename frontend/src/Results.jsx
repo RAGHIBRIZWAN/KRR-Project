@@ -36,6 +36,54 @@ const Results = () => {
   const scores = result?.scores || {};
   const performance = result?.performance || {};
 
+  // Simple Markdown Parser for the specific format returned by the AI
+  const renderAnalysis = (text) => {
+    if (!text) return null;
+
+    // Split by headers (###)
+    const sections = text.split('###').filter(s => s.trim());
+
+    return sections.map((section, index) => {
+      const lines = section.trim().split('\n');
+      const title = lines[0].trim();
+      const content = lines.slice(1).join('\n').trim();
+
+      // Check if content is a list
+      const isList = content.includes('*');
+      
+      let renderedContent;
+      if (isList) {
+        const listItems = content.split('*').filter(i => i.trim());
+        renderedContent = (
+          <ul className="analysis-list">
+            {listItems.map((item, i) => {
+              // Parse bold text **...**
+              const parts = item.split('**');
+              return (
+                <li key={i} className="analysis-list-item">
+                  {parts.map((part, j) => {
+                    if (j % 2 === 1) return <strong key={j}>{part}</strong>;
+                    return <span key={j}>{part}</span>;
+                  })}
+                </li>
+              );
+            })}
+          </ul>
+        );
+      } else {
+        // Paragraph text
+        renderedContent = <p className="analysis-text">{content}</p>;
+      }
+
+      return (
+        <div className="analysis-block" key={index}>
+          <h3 className="analysis-title">{title}</h3>
+          {renderedContent}
+        </div>
+      );
+    });
+  };
+
   return (
     <div className="page">
       <main className="shell">
@@ -73,12 +121,12 @@ const Results = () => {
             </div>
           </div>
 
-          <div className="card">
+          <div className="card wide">
             <div className="section-header">
               <div className="pill">Performance signals</div>
               <div className="muted small">Projected readiness</div>
             </div>
-            <div className="performance-grid tight">
+            <div className="performance-grid">
               <div className="performance-item">
                 <div className="performance-label">Job Performance</div>
                 <div className="performance-value">{performance.JobPerformance}%</div>
@@ -91,12 +139,14 @@ const Results = () => {
           </div>
 
           {result?.analysis && (
-            <div className="card wide">
+            <div className="card wide analysis-card-container">
               <div className="section-header">
                 <div className="pill">AI narrative</div>
                 <div className="muted small">Tailored summary</div>
               </div>
-              <div className="analysis-content" dangerouslySetInnerHTML={{ __html: result.analysis || '' }} />
+              <div className="analysis-content-wrapper">
+                {renderAnalysis(result.analysis)}
+              </div>
             </div>
           )}
         </section>

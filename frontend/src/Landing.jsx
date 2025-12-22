@@ -47,14 +47,13 @@ const Landing = () => {
 
       <main className="shell">
         <section className="panel hero" id="hero">
-          <p className="eyebrow">Big Five, elevated</p>
-          <h1>Understand the people behind your projects with science-backed personality insights.</h1>
+          <h1>AI-Powered Personality Assessment & Performance Prediction</h1>
           <p className="lede">
-            Run a quick Big Five assessment, translate results into job and academic performance signals, and store everything in a semantic knowledge base you can actually query.
+            Measure Big Five personality traits, predict academic and job performance, and store results in a semantic knowledge base for future analysis.
           </p>
           <div className="actions">
-            <a className="btn primary" href="/assessment">Start the assessment</a>
-            <a className="btn ghost" href="#why">See how it helps</a>
+            <a className="btn primary" href="/assessment">Start Personality Assessment</a>
+            <a className="btn ghost" href="#why">Learn More</a>
           </div>
 
           <div className="grid feature-row">
@@ -91,11 +90,22 @@ const Landing = () => {
         </section>
 
         <section className="panel" id="ontology">
+          <h2>Ontology & Data Model</h2>
+          <p className="muted">
+            Unlike traditional systems, our platform stores all assessment data in an RDF/OWL ontology, enabling semantic reasoning, querying, and future AI integration.
+          </p>
+          
           <div className="grid stats">
             <div className="card">
-              <div className="pill">Ontology-backed trust</div>
-              <h3>Transparent, queryable data</h3>
-              <p className="muted">Each assessment writes into the ontology with participants, trait scores, and predicted performance links. That means you can trace, audit, and reuse insights across systems—no black boxes.</p>
+              <div className="pill">Highlight Feature</div>
+              <h3>Core Data Entities</h3>
+              <div className="tags" style={{marginTop: '1rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem'}}>
+                <span className="tag">Participant</span>
+                <span className="tag">Assessment</span>
+                <span className="tag">PersonalityTrait</span>
+                <span className="tag">TraitScore</span>
+                <span className="tag">PerformancePrediction</span>
+              </div>
             </div>
             <div className="card stats-col">
               {stats.map((s) => (
@@ -108,11 +118,69 @@ const Landing = () => {
           </div>
         </section>
 
+        <section className="panel" id="privacy">
+          <h2>Privacy & Ethics</h2>
+          <p className="muted">Your trust is our priority. We handle personality data with the highest standards of security and ethics.</p>
+          <div className="grid feature-row" style={{ marginTop: '2rem' }}>
+            <div className="card">
+              <h3>Secure Storage</h3>
+              <p className="muted small">Data stored securely.</p>
+            </div>
+            <div className="card">
+              <h3>Consent First</h3>
+              <p className="muted small">No public sharing without consent.</p>
+            </div>
+            <div className="card">
+              <h3>Research Focused</h3>
+              <p className="muted small">Semantic data used for research & analysis only.</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="panel" id="about">
+          <h2>About the Project</h2>
+          <p className="muted">
+            This project was developed as part of the <strong>Knowledge Representation and Reasoning (KRR)</strong> course. 
+            It demonstrates the application of semantic web technologies in personality assessment and performance prediction.
+          </p>
+
+          <h3 style={{marginTop: '2rem', marginBottom: '1rem'}}>Meet the Team</h3>
+          <div className="grid feature-row">
+            <div className="card" style={{textAlign: 'center'}}>
+              <div style={{width: '80px', height: '80px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', margin: '0 auto 1rem', display: 'grid', placeItems: 'center'}}>
+                <span style={{fontSize: '24px'}}>👤</span>
+              </div>
+              <h3>Teammate 1</h3>
+              <p className="muted small">Team Member</p>
+            </div>
+            <div className="card" style={{textAlign: 'center'}}>
+              <div style={{width: '80px', height: '80px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', margin: '0 auto 1rem', display: 'grid', placeItems: 'center'}}>
+                <span style={{fontSize: '24px'}}>👤</span>
+              </div>
+              <h3>Teammate 2</h3>
+              <p className="muted small">Team Member</p>
+            </div>
+            <div className="card" style={{textAlign: 'center'}}>
+              <div style={{width: '80px', height: '80px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%', margin: '0 auto 1rem', display: 'grid', placeItems: 'center'}}>
+                <span style={{fontSize: '24px'}}>👤</span>
+              </div>
+              <h3>Teammate 3</h3>
+              <p className="muted small">Team Member</p>
+            </div>
+            <div className="card" style={{textAlign: 'center', borderColor: 'var(--accent)'}}>
+               <div style={{width: '80px', height: '80px', background: 'linear-gradient(135deg, var(--accent), var(--accent-2))', borderRadius: '50%', margin: '0 auto 1rem', display: 'grid', placeItems: 'center'}}>
+                <span style={{fontSize: '24px', color: '#000'}}>🎓</span>
+              </div>
+              <h3>Supervisor Name</h3>
+              <p className="muted small" style={{color: 'var(--accent)'}}>Project Supervisor</p>
+            </div>
+          </div>
+        </section>
+
         <section className="panel cta" id="cta">
-          <h2>Launch the assessment and see the narrative behind your numbers.</h2>
+          <h2>Ready to discover your personality profile and performance potential?</h2>
           <div className="actions">
-            <a className="btn primary" href="/assessment">Start now</a>
-            <a className="btn ghost" href="/results">View results</a>
+            <a className="btn primary" href="/assessment">Start Assessment</a>
           </div>
         </section>
       </main>

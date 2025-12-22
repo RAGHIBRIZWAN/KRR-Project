@@ -88,26 +88,82 @@ def normalize_user_id(user_id):
     return str(user_id).strip() if user_id is not None else ""
 
 
+def find_entity_by_id(cls, name):
+    """Robustly find an entity by name using multiple IRI strategies."""
+    base = onto.base_iri
+    candidates = []
+    
+    # Strategy 1: Construct IRI with #
+    if base.endswith('#'):
+        candidates.append(f"{base}{name}")
+    else:
+        candidates.append(f"{base}#{name}")
+    
+    # Strategy 2: Construct IRI with /
+    if base.endswith('/'):
+        candidates.append(f"{base}{name}")
+    else:
+        candidates.append(f"{base}/{name}")
+
+    # Strategy 3: Just the name (if base is empty or weird)
+    candidates.append(name)
+
+    for iri in candidates:
+        found = onto.search_one(iri=iri)
+        if found:
+            return found
+            
+    # Strategy 4: Search by name property (slower but fallback)
+    if hasattr(cls, "instances"):
+        for inst in cls.instances():
+            if inst.name == name:
+                return inst
+
+    # Strategy 5: Wildcard search (desperate fallback)
+    try:
+        results = onto.search(iri=f"*{name}")
+        for r in results:
+            if hasattr(r, 'name') and r.name == name:
+                return r
+    except Exception:
+        pass
+                
+    return None
+
 def get_or_create_singleton(cls, name):
     """Return a single individual by name; if multiple exist, keep one and destroy extras; if none, create."""
-    matches = list(cls.instances()) if hasattr(cls, "instances") else []
-    matches = [m for m in matches if m.name == name]
-    keeper = None
-    if matches:
-        keeper = matches[0]
-        # remove duplicates beyond the first to avoid IRI collisions
-        for dup in matches[1:]:
-            try:
+    print(f"🔍 Looking for singleton: {name} of type {cls.name} (Base IRI: {onto.base_iri})")
+    
+    keeper = find_entity_by_id(cls, name)
+    
+    if keeper:
+        print(f"   ✅ Found existing: {keeper.iri}")
+        # Check for duplicates in instances list just in case
+        if hasattr(cls, "instances"):
+            matches = [m for m in cls.instances() if m.name == name and m != keeper]
+            for dup in matches:
+                print(f"   🗑️ Removing duplicate: {dup.iri}")
                 destroy_entity(dup)
-            except Exception:
-                pass
     else:
-        keeper = cls(name)
+        print(f"   ✨ Creating new: {name}")
+        try:
+            keeper = cls(name)
+        except Exception as e:
+            print(f"   ⚠️ Creation failed ({e}). Retrying fetch...")
+            # Retry fetch in case of race condition or DB sync issue
+            keeper = find_entity_by_id(cls, name)
+            if not keeper:
+                print(f"   ❌ CRITICAL: Could not create or find {name}")
+                raise e
+            else:
+                print(f"   ✅ Recovered existing after error: {keeper.iri}")
+                
     return keeper
 
 
 def dedup_user_entities(user_id):
     """Clean duplicates for this user: participant, assessment, and trait scores with the user prefix."""
+    print(f"🧹 Deduplicating entities for user: {user_id}")
     # Participant
     get_or_create_singleton(onto.Participant, f"Participant_{user_id}")
 
@@ -235,8 +291,23 @@ def get_previous_result():
     try:
         # Ensure we read latest ontology state
         onto = load_ontology(force_reload=True)
-        participant = onto.search_one(name=f"Participant_{user_id}")
+        
+        participant = None
+        
+        # 1. Search by participantID property (Most reliable)
+        if hasattr(onto, "Participant"):
+            for p in onto.Participant.instances():
+                # Check participantID property
+                if hasattr(p, "participantID") and p.participantID and str(p.participantID[0]) == user_id:
+                    participant = p
+                    break
+        
+        # 2. Fallback to IRI search
         if not participant:
+            participant = find_entity_by_id(onto.Participant, f"Participant_{user_id}")
+        
+        if not participant:
+            print(f"❌ Participant_{user_id} not found in ontology.")
             return jsonify({"found": False, "message": "not found"}), 200
 
         # Performance scores (stored on participant)
@@ -244,7 +315,7 @@ def get_previous_result():
         acad_perf = float(participant.academicPerformance[0]) if hasattr(participant, 'academicPerformance') and participant.academicPerformance else 0.0
 
         # Try to find assessment and trait scores
-        assessment = onto.search_one(name=f"Assessment_{user_id}")
+        assessment = find_entity_by_id(onto.Assessment, f"Assessment_{user_id}")
         scores = {}
         trait_scores = []
         if assessment and hasattr(assessment, 'hasScore'):
@@ -306,9 +377,6 @@ def submit_assessment():
     user_name = data.get('name', 'Anonymous')
     answers = data.get('answers', {})
     
-    # Clean any leftover duplicates for this user to avoid UNIQUE errors
-    dedup_user_entities(user_id)
-
     # 1. Calculate trait totals
     trait_totals = {}
     for q in onto.AssessmentQuestion.instances():
@@ -351,7 +419,15 @@ def submit_assessment():
             # Find or create participant by name (no wildcard), consolidating duplicates
             participant = get_or_create_singleton(onto.Participant, f"Participant_{user_id}")
             participant.participantID = [user_id]
-            participant.name = [user_name]
+            
+            # Use label or a specific property for the display name to avoid renaming the entity
+            # If 'name' is a DataProperty in your ontology, this is fine. 
+            # But if it conflicts with owlready2's .name (IRI suffix), it causes issues.
+            # Safest is to use label or ensure we are setting the DataProperty.
+            if hasattr(onto, "name") and isinstance(onto.name, DataPropertyClass):
+                 participant.name = [user_name]
+            else:
+                 participant.label = [user_name]
 
             # Find or create assessment by name (no wildcard), consolidating duplicates
             assessment = get_or_create_singleton(onto.Assessment, f"Assessment_{user_id}")
