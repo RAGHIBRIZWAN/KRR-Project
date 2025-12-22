@@ -11,7 +11,7 @@ app = Flask(__name__)
 # --- CONFIGURATION ---
 ONTOLOGY_PATH = os.path.join(app.root_path, "project.rdf")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-FRONTEND_DIR = os.path.join(app.root_path, 'frontend')
+FRONTEND_DIR = os.path.join(app.root_path, '../frontend')
 ALLOWED_FRONTEND_ORIGIN = "http://localhost:5173"
 
 client = Groq(api_key=GROQ_API_KEY)
