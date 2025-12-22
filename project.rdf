@@ -1554,5 +1554,101 @@
   <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">56.0</meanScore>
 </owl:NamedIndividual>
 
+<owl:NamedIndividual rdf:about="#['talha']">
+  <rdf:type rdf:resource="#Participant"/>
+  <participantID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</participantID>
+  <jobPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.2</jobPerformance>
+  <academicPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">58.6</academicPerformance>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Assessment_1">
+  <rdf:type rdf:resource="#Assessment"/>
+  <hasScore rdf:resource="#Score_1_Agreeableness"/>
+  <hasScore rdf:resource="#Score_1_Conscientiousness"/>
+  <hasScore rdf:resource="#Score_1_Neuroticism"/>
+  <hasScore rdf:resource="#Score_1_Extraversion"/>
+  <hasScore rdf:resource="#Score_1_Openness"/>
+  <completedBy rdf:resource="#['talha ']"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Score_1_Agreeableness">
+  <rdf:type rdf:resource="#TraitScore"/>
+  <scoresOnTrait rdf:resource="#Agreeableness"/>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">58.0</meanScore>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Score_1_Conscientiousness">
+  <rdf:type rdf:resource="#TraitScore"/>
+  <scoresOnTrait rdf:resource="#Conscientiousness"/>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">59.0</meanScore>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Score_1_Neuroticism">
+  <rdf:type rdf:resource="#TraitScore"/>
+  <scoresOnTrait rdf:resource="#Neuroticism"/>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">40.0</meanScore>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Score_1_Extraversion">
+  <rdf:type rdf:resource="#TraitScore"/>
+  <scoresOnTrait rdf:resource="#Extraversion"/>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.0</meanScore>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Score_1_Openness">
+  <rdf:type rdf:resource="#TraitScore"/>
+  <scoresOnTrait rdf:resource="#Openness"/>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">52.0</meanScore>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#['talha ']">
+  <rdf:type rdf:resource="#Participant"/>
+  <participantID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</participantID>
+  <jobPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.2</jobPerformance>
+  <academicPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">58.6</academicPerformance>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#['hussain']">
+  <rdf:type rdf:resource="#Participant"/>
+  <participantID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">5</participantID>
+  <jobPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.68</jobPerformance>
+  <academicPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">59.02</academicPerformance>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Assessment_5">
+  <rdf:type rdf:resource="#Assessment"/>
+  <completedBy rdf:resource="#['hussain']"/>
+  <hasScore rdf:resource="#Score_5_Neuroticism"/>
+  <hasScore rdf:resource="#Score_5_Extraversion"/>
+  <hasScore rdf:resource="#Score_5_Openness"/>
+  <hasScore rdf:resource="#Score_5_Conscientiousness"/>
+  <hasScore rdf:resource="#Score_5_Agreeableness"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Score_5_Agreeableness">
+  <rdf:type rdf:resource="#TraitScore"/>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">56.0</meanScore>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Score_5_Conscientiousness">
+  <rdf:type rdf:resource="#TraitScore"/>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.0</meanScore>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Score_5_Neuroticism">
+  <rdf:type rdf:resource="#TraitScore"/>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">48.0</meanScore>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Score_5_Extraversion">
+  <rdf:type rdf:resource="#TraitScore"/>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">58.0</meanScore>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Score_5_Openness">
+  <rdf:type rdf:resource="#TraitScore"/>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">48.0</meanScore>
+</owl:NamedIndividual>
+
 
 </rdf:RDF>
