@@ -294,25 +294,35 @@ def get_previous_result():
         
         participant = None
         
-        # 1. Search by participantID property (Most reliable)
-        if hasattr(onto, "Participant"):
+        # 1. Priority: Search by canonical IRI (Participant_{user_id})
+        # This is the one we write to in submit_assessment
+        participant = find_entity_by_id(onto.Participant, f"Participant_{user_id}")
+        
+        # 2. Fallback: Search by participantID property
+        if not participant and hasattr(onto, "Participant"):
+            print(f"⚠️ Canonical Participant_{user_id} not found. Searching by ID property...")
             for p in onto.Participant.instances():
-                # Check participantID property
                 if hasattr(p, "participantID") and p.participantID and str(p.participantID[0]) == user_id:
                     participant = p
                     break
-        
-        # 2. Fallback to IRI search
-        if not participant:
-            participant = find_entity_by_id(onto.Participant, f"Participant_{user_id}")
         
         if not participant:
             print(f"❌ Participant_{user_id} not found in ontology.")
             return jsonify({"found": False, "message": "not found"}), 200
 
+        print(f"✅ Found participant: {participant.name} (IRI: {participant.iri})")
+
         # Performance scores (stored on participant)
-        job_perf = float(participant.jobPerformance[0]) if hasattr(participant, 'jobPerformance') and participant.jobPerformance else 0.0
-        acad_perf = float(participant.academicPerformance[0]) if hasattr(participant, 'academicPerformance') and participant.academicPerformance else 0.0
+        # Use the last value in the list if multiple exist, but we expect only one after cleanup
+        job_perf = 0.0
+        if hasattr(participant, 'jobPerformance') and participant.jobPerformance:
+            job_perf = float(participant.jobPerformance[-1]) # Take last added
+            print(f"   JobPerformance: {participant.jobPerformance}")
+
+        acad_perf = 0.0
+        if hasattr(participant, 'academicPerformance') and participant.academicPerformance:
+            acad_perf = float(participant.academicPerformance[-1]) # Take last added
+            print(f"   AcademicPerformance: {participant.academicPerformance}")
 
         # Try to find assessment and trait scores
         assessment = find_entity_by_id(onto.Assessment, f"Assessment_{user_id}")
@@ -435,8 +445,13 @@ def submit_assessment():
 
             # Update performance scores
             if "JobPerformance" in perf_scores:
+                print(f"   🔄 Updating JobPerformance to: {perf_scores['JobPerformance']}")
+                participant.jobPerformance = [] # Clear previous values to ensure update
                 participant.jobPerformance = [float(perf_scores["JobPerformance"])]
+            
             if "AcademicPerformance" in perf_scores:
+                print(f"   🔄 Updating AcademicPerformance to: {perf_scores['AcademicPerformance']}")
+                participant.academicPerformance = [] # Clear previous values to ensure update
                 participant.academicPerformance = [float(perf_scores["AcademicPerformance"])]
 
             # Ensure hasScore is a list

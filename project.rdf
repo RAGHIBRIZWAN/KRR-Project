@@ -1480,25 +1480,25 @@
 <owl:NamedIndividual rdf:about="#Score_hr1_Agreeableness">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Agreeableness"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">66.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Conscientiousness">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Conscientiousness"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">68.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">64.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Neuroticism">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Neuroticism"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">56.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">64.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Extraversion">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Extraversion"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">58.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Openness">
@@ -1511,8 +1511,8 @@
   <rdf:type rdf:resource="#Participant"/>
   <participantID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hr1</participantID>
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">umar</rdfs:label>
-  <jobPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">62.66</jobPerformance>
-  <academicPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">63.54</academicPerformance>
+  <jobPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.86</jobPerformance>
+  <academicPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">61.94</academicPerformance>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#['ali']">
