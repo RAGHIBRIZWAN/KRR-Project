@@ -46,33 +46,61 @@ const Results = () => {
     return sections.map((section, index) => {
       const lines = section.trim().split('\n');
       const title = lines[0].trim();
-      const content = lines.slice(1).join('\n').trim();
+      // Filter out empty lines
+      const contentLines = lines.slice(1).filter(l => l.trim());
 
-      // Check if content is a list
-      const isList = content.includes('*');
+      // Check if content looks like a list (starts with *, -, or number)
+      const isList = contentLines.some(l => /^[*-]|\d+\./.test(l.trim()));
       
       let renderedContent;
       if (isList) {
-        const listItems = content.split('*').filter(i => i.trim());
         renderedContent = (
-          <ul className="analysis-list">
-            {listItems.map((item, i) => {
-              // Parse bold text **...**
-              const parts = item.split('**');
+          <div className="analysis-list-grid">
+            {contentLines.map((line, i) => {
+              // Remove list markers (*, -, 1.)
+              let cleanLine = line.trim().replace(/^([*-]|\d+\.)\s*/, '');
+              
+              // Check for bold text **Title**
+              const parts = cleanLine.split('**');
+              
+              // If we have bold text, we assume it's a header-description pair
+              // Format: **Header:** Description
+              if (parts.length >= 3) {
+                const header = parts[1];
+                const description = parts.slice(2).join('**').replace(/^[:\s]+/, ''); // Remove leading colon/space
+                
+                return (
+                  <div key={i} className="analysis-card-item">
+                    <div className="analysis-item-icon">✦</div>
+                    <div className="analysis-item-content">
+                      <div className="analysis-item-title">{header}</div>
+                      <div className="analysis-item-desc">{description || parts[0]}</div> 
+                    </div>
+                  </div>
+                );
+              }
+              
+              // Fallback for items without bold formatting or just plain text
               return (
-                <li key={i} className="analysis-list-item">
-                  {parts.map((part, j) => {
-                    if (j % 2 === 1) return <strong key={j}>{part}</strong>;
-                    return <span key={j}>{part}</span>;
-                  })}
-                </li>
+                <div key={i} className="analysis-card-item simple">
+                   <div className="analysis-item-icon">✦</div>
+                   <div className="analysis-item-content">
+                     <div className="analysis-item-desc">{cleanLine}</div>
+                   </div>
+                </div>
               );
             })}
-          </ul>
+          </div>
         );
       } else {
         // Paragraph text
-        renderedContent = <p className="analysis-text">{content}</p>;
+        renderedContent = (
+          <div className="analysis-text-block">
+            {contentLines.map((line, i) => (
+              <p key={i} className="analysis-text">{line}</p>
+            ))}
+          </div>
+        );
       }
 
       return (

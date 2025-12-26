@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+const API_BASE = window.location.port === '5173' ? 'http://localhost:5000' : '';
+
 const AssessmentLogin = () => {
   const [name, setName] = useState('');
   const [userId, setUserId] = useState('');
@@ -12,14 +14,32 @@ const AssessmentLogin = () => {
     if (savedId) setUserId(savedId);
   }, []);
 
-  const start = () => {
+  const start = async () => {
     if (!name || !userId) {
       setToast({ type: 'info', msg: 'Please enter your name and ID' });
       return;
     }
-    localStorage.setItem('pi_name', name);
-    localStorage.setItem('pi_userId', userId);
-    window.location.assign('/assessment/questions');
+
+    try {
+      const response = await fetch(`${API_BASE}/validate_user`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: userId, name: name }),
+      });
+
+      const data = await response.json();
+
+      if (data.valid) {
+        localStorage.setItem('pi_name', name);
+        localStorage.setItem('pi_userId', userId);
+        window.location.assign('/assessment/questions');
+      } else {
+        setToast({ type: 'error', msg: data.message });
+      }
+    } catch (error) {
+      console.error("Validation error:", error);
+      setToast({ type: 'error', msg: 'Connection error. Please try again.' });
+    }
   };
 
   return (

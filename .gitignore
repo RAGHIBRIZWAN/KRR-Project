@@ -1,3 +1,12 @@
 .env
 __pycache__/
 *.pyc
+.vscode/
+.DS_Store
+logs/
+data/
+output/
+*.sqlite3
+.venv/
+env/
+venv/

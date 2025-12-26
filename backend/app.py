@@ -376,6 +376,43 @@ def get_questions():
     questions_data.sort(key=sort_key)
     return jsonify(questions_data)
 
+@app.route('/validate_user', methods=['POST'])
+def validate_user():
+    global onto
+    data = request.json
+    user_id = normalize_user_id(data.get('id'))
+    user_name = data.get('name', '').strip()
+
+    if not user_id:
+        return jsonify({"valid": False, "message": "User ID is required"}), 400
+
+    try:
+        # Ensure we read latest ontology state
+        onto = load_ontology(force_reload=True)
+        
+        participant = find_entity_by_id(onto.Participant, f"Participant_{user_id}")
+        
+        if participant:
+            # Check name
+            stored_name = ""
+            
+            # Determine where the name is stored - logic matches submit_assessment
+            if hasattr(onto, "name") and isinstance(onto.name, DataPropertyClass):
+                if participant.name:
+                    stored_name = str(participant.name[0])
+            elif participant.label:
+                stored_name = str(participant.label[0])
+            
+            # Only validate if we actually found a stored name
+            if stored_name and stored_name.lower() != user_name.lower():
+                 return jsonify({"valid": False, "message": f"ID '{user_id}' is already registered with a different name."}), 200
+        
+        return jsonify({"valid": True}), 200
+
+    except Exception as e:
+        print(f"❌ ERROR validating user: {e}")
+        return jsonify({"valid": False, "message": "Internal server error"}), 500
+
 @app.route('/submit_assessment', methods=['POST'])
 def submit_assessment():
     global onto
