@@ -15,7 +15,13 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 FRONTEND_DIR = os.path.join(app.root_path, '../frontend')
 ALLOWED_FRONTEND_ORIGIN = "http://localhost:5173"
 
-client = Groq(api_key=GROQ_API_KEY)
+# Initialize Groq client only if API key is available
+client = None
+if GROQ_API_KEY:
+    try:
+        client = Groq(api_key=GROQ_API_KEY)
+    except Exception as e:
+        print(f"⚠️ Could not initialize Groq client: {e}")
 
 # Load ontology once at startup (absolute path) and provide a helper for reloads
 onto_world = None
@@ -522,6 +528,22 @@ def persist_role_fit_scores(participant, role_results):
 
 def generate_role_explanations(name, trait_scores, role_results):
     """Use Groq to create concise explanations per role. Returns mapping role -> text payload."""
+    # Fallback function when Groq is not available
+    def build_fallback_explanations():
+        mapped = {}
+        for role, info in role_results.items():
+            mapped[role] = {
+                "explanation": f"Role fit at {info['score']}%. Strongest traits: {', '.join([c['trait'] for c in info['contributions'][:2]])}.",
+                "strengths": [c["trait"] for c in info.get("contributions", [])[:2]],
+                "challenges": [c["trait"] for c in info.get("contributions", [])[-2:]],
+                "counterfactual": build_counterfactual_insight(info.get("contributions", [])),
+                "skill_gaps": suggest_skill_gaps(role, info.get("contributions", [])),
+            }
+        return mapped
+    
+    if not client:
+        return build_fallback_explanations()
+    
     role_payload = {r: {
         "score": data.get("score"),
         "top_traits": [c["trait"] for c in sorted(data.get("contributions", []), key=lambda c: c["closeness"], reverse=True)[:3]],
@@ -571,17 +593,7 @@ Keep total output compact and strictly valid JSON array.
         return mapped
     except Exception as exc:
         print(f"⚠️ Groq role explanation fallback: {exc}")
-        # Fallback deterministic explanations
-        mapped = {}
-        for role, info in role_results.items():
-            mapped[role] = {
-                "explanation": f"Role fit at {info['score']}%. Strongest traits: {', '.join([c['trait'] for c in info['contributions'][:2]])}.",
-                "strengths": [c["trait"] for c in info.get("contributions", [])[:2]],
-                "challenges": [c["trait"] for c in info.get("contributions", [])[-2:]],
-                "counterfactual": build_counterfactual_insight(info.get("contributions", [])),
-                "skill_gaps": suggest_skill_gaps(role, info.get("contributions", [])),
-            }
-        return mapped
+        return build_fallback_explanations()
 
 def calculate_performance_scores(final_scores):
     job_perf = 3.0
@@ -606,6 +618,9 @@ def calculate_performance_scores(final_scores):
     }
 
 def get_groq_suggestions(scores, name):
+    if not client:
+        return "AI analysis unavailable - Groq API key not configured. Please set GROQ_API_KEY environment variable."
+    
     prompt = f"""
         Act as an expert Industrial-Organizational Psychologist and Personality Profiler. 
         Analyze the personality of '{name}' based on the following Big Five trait scores (scale 0-100%):
@@ -648,7 +663,7 @@ def get_groq_suggestions(scores, name):
 
 def generate_justification_report(big_five_scores, performance_predictions, answered_questions):
     """Generate an explainable justification report via Groq."""
-    if not GROQ_API_KEY:
+    if not client:
         return "Groq API key not configured; justification unavailable."
 
     # Build question evidence block
@@ -919,11 +934,17 @@ def get_questions():
 def validate_user():
     global onto
     data = request.json
+    if not data:
+        return jsonify({"valid": False, "message": "Request body is required"}), 400
+    
     user_id = normalize_user_id(data.get('id'))
     user_name = data.get('name', '').strip()
 
     if not user_id:
         return jsonify({"valid": False, "message": "User ID is required"}), 400
+    
+    if not user_name:
+        return jsonify({"valid": False, "message": "Name is required"}), 400
 
     try:
         # Ensure we read latest ontology state
@@ -955,14 +976,37 @@ def validate_user():
 @app.route('/submit_assessment', methods=['POST'])
 def submit_assessment():
     global onto
+    
+    # Validate request body
+    data = request.json
+    if not data:
+        return jsonify({"error": "Request body is required"}), 400
+    
+    user_id = normalize_user_id(data.get('id', ''))
+    user_name = data.get('name', '').strip()
+    answers = data.get('answers', {})
+    
+    # Validate required fields
+    if not user_id:
+        return jsonify({"error": "User ID is required"}), 400
+    if not user_name:
+        return jsonify({"error": "Name is required"}), 400
+    if not answers or not isinstance(answers, dict):
+        return jsonify({"error": "Answers are required"}), 400
+    
+    # Validate answer values (must be 1-5)
+    for q_id, value in answers.items():
+        try:
+            val = int(value)
+            if val < 1 or val > 5:
+                return jsonify({"error": f"Answer for question {q_id} must be between 1 and 5"}), 400
+        except (ValueError, TypeError):
+            return jsonify({"error": f"Invalid answer value for question {q_id}"}), 400
+    
     # Reload ontology to ensure we see existing individuals before creating any
     onto = load_ontology(force_reload=True)
     ensure_custom_properties(onto)
-
-    data = request.json
-    user_id = normalize_user_id(data.get('id', 'Unknown'))
-    user_name = data.get('name', 'Anonymous')
-    answers = data.get('answers', {})
+    
     answered_questions_data = []
     
     # 1. Calculate trait totals
