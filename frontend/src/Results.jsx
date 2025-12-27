@@ -9,6 +9,11 @@ const Results = () => {
   const [justificationText, setJustificationText] = useState('');
   const [justificationLoading, setJustificationLoading] = useState(false);
   const [justificationError, setJustificationError] = useState('');
+  const [careerFit, setCareerFit] = useState(null);
+  const [careerFitLoading, setCareerFitLoading] = useState(false);
+  const [careerFitError, setCareerFitError] = useState('');
+  const [selectedRole, setSelectedRole] = useState('');
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem('pi_result');
@@ -46,24 +51,51 @@ const Results = () => {
   }, [payload?.userId]);
 
   useEffect(() => {
-    if (!isModalOpen) return;
-    const handler = (e) => {
-      if (e.key === 'Escape') setIsModalOpen(false);
+    const fetchCareerFit = async () => {
+      if (!payload?.userId) return;
+      setCareerFitLoading(true);
+      setCareerFitError('');
+      try {
+        const res = await fetch(`${API_BASE}/api/career-fit/${encodeURIComponent(payload.userId)}`);
+        const data = await res.json();
+        if (!data?.found) {
+          setCareerFitError(data?.message || 'Career role fit not available.');
+          setCareerFit(null);
+        } else {
+          setCareerFit(data);
+        }
+      } catch (e) {
+        setCareerFitError('Could not load career role fit.');
+      } finally {
+        setCareerFitLoading(false);
+      }
     };
-    window.addEventListener('keydown', handler);
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden'; // Lock background scroll while modal is open
-    return () => window.removeEventListener('keydown', handler);
-  }, [isModalOpen]);
+
+    fetchCareerFit();
+  }, [payload?.userId]);
 
   useEffect(() => {
-    if (!isModalOpen) {
+    const anyModalOpen = isModalOpen || isRoleModalOpen;
+    if (!anyModalOpen) {
       document.body.style.overflow = '';
+      return undefined;
     }
-    return () => {
-      document.body.style.overflow = '';
+
+    const handler = (e) => {
+      if (e.key === 'Escape') {
+        setIsModalOpen(false);
+        setIsRoleModalOpen(false);
+      }
     };
-  }, [isModalOpen]);
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handler);
+    return () => {
+      window.removeEventListener('keydown', handler);
+      document.body.style.overflow = previousOverflow || '';
+    };
+  }, [isModalOpen, isRoleModalOpen]);
 
   if (!payload) {
     return (
@@ -189,6 +221,11 @@ const Results = () => {
     setIsModalOpen(true);
   };
 
+  const handleRoleCardClick = (role) => {
+    setSelectedRole(role);
+    setIsRoleModalOpen(true);
+  };
+
   // Simple Markdown Parser for the specific format returned by the AI
   const renderAnalysis = (text) => {
     if (!text) return null;
@@ -265,6 +302,12 @@ const Results = () => {
     });
   };
 
+  const roleEntries = careerFit?.roles
+    ? Object.entries(careerFit.roles).map(([role, data]) => ({ role, score: data.score, position: null, data }))
+    : [];
+
+  const selectedRoleData = selectedRole && careerFit?.roles ? careerFit.roles[selectedRole] : null;
+
   return (
     <div className="page">
       <main className="shell">
@@ -338,6 +381,62 @@ const Results = () => {
             </div>
           </div>
 
+          <div className="card wide">
+            <div className="section-header">
+              <div className="pill">Career Role Fit</div>
+              <div className="muted small">
+                {careerFit?.top_recommendation ? `Top pick: ${careerFit.top_recommendation}` : 'Best-to-weakest fit ranking'}
+              </div>
+            </div>
+            {careerFitLoading && <p className="muted">Crunching career role fit…</p>}
+            {!careerFitLoading && careerFitError && <p className="muted">{careerFitError}</p>}
+            {!careerFitLoading && !careerFitError && roleEntries.length > 0 && (
+              <div className="career-grid">
+                {roleEntries.map((entry) => {
+                  const topTraits = (entry.data?.traits || []).slice(0, 2).map((t) => t.trait).join(', ');
+                  const scoreVal = entry.score ?? entry.data?.score ?? 0;
+                  const roleInitials = entry.role
+                    .split(' ')
+                    .map((w) => w[0])
+                    .join('')
+                    .slice(0, 2)
+                    .toUpperCase();
+                  return (
+                    <div
+                      className="career-card clickable"
+                      key={entry.role}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => handleRoleCardClick(entry.role)}
+                      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleRoleCardClick(entry.role)}
+                    >
+                      <div className="career-card-top">
+                        <div className="role-chip-stack">
+                          <div className="role-icon">{roleInitials}</div>
+                        </div>
+                        <div className="career-score">{scoreVal}%</div>
+                      </div>
+                      <div className="career-card-mid">
+                        <div className="career-role-name">{entry.role}</div>
+                        <div className="muted small">Career match</div>
+                      </div>
+                      <div className="career-bar">
+                        <div className="career-bar-fill" style={{ width: `${scoreVal}%` }} />
+                      </div>
+                      <div className="career-meta">
+                        <span className="pill subtle">Fit indicator</span>
+                        <span className="muted small">Top traits: {topTraits || 'Pending'}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            {!careerFitLoading && !careerFitError && roleEntries.length === 0 && (
+              <p className="muted">Career fit will appear here after the assessment runs.</p>
+            )}
+          </div>
+
           {result?.analysis && (
             <div className="card wide analysis-card-container">
               <div className="section-header">
@@ -374,6 +473,91 @@ const Results = () => {
                     return cleaned || fallback || 'No justification available for this section.';
                   })()}
                 </pre>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isRoleModalOpen && (
+        <div className="modal-backdrop" onClick={() => setIsRoleModalOpen(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 className="modal-title">{selectedRole}</h3>
+              <button className="modal-close" onClick={() => setIsRoleModalOpen(false)} aria-label="Close career role modal">
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              {selectedRoleData ? (
+                <>
+                  <div className="career-modal-header">
+                    <div className="career-modal-score">
+                      <div className="career-score-large">{selectedRoleData.score}%</div>
+                      <div className="muted small">Fit score</div>
+                    </div>
+                    <div className="modal-badges">
+                      <span className="pill subtle">{selectedRoleData.skill_gaps?.length ? 'Growth plan ready' : 'Strength-first'}</span>
+                    </div>
+                  </div>
+
+                  {selectedRoleData.explanation && <p className="muted modal-explainer">{selectedRoleData.explanation}</p>}
+
+                  <div className="modal-grid">
+                    <div className="modal-tile">
+                      <div className="modal-subtitle">Key trait drivers</div>
+                      <div className="trait-chip-row">
+                        {(selectedRoleData.traits || []).slice(0, 4).map((t) => (
+                          <span className="trait-chip" key={t.trait}>
+                            {t.trait}: {t.actual}% (target {t.target})
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="modal-tile">
+                      <div className="modal-subtitle">Counterfactual insight</div>
+                      <p className="muted small" style={{ lineHeight: 1.5 }}>{selectedRoleData.counterfactual || 'Maintain current balance to keep this fit strong.'}</p>
+                    </div>
+                  </div>
+
+                  <div className="modal-grid two-col">
+                    {selectedRoleData.strengths?.length > 0 && (
+                      <div className="modal-tile">
+                        <div className="modal-subtitle">Strengths</div>
+                        <ul className="bullet-list tight">
+                          {selectedRoleData.strengths.map((item, idx) => (
+                            <li key={`${item}-${idx}`}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {selectedRoleData.challenges?.length > 0 && (
+                      <div className="modal-tile">
+                        <div className="modal-subtitle">Potential challenges</div>
+                        <ul className="bullet-list tight">
+                          {selectedRoleData.challenges.map((item, idx) => (
+                            <li key={`${item}-${idx}`}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+
+                  {selectedRoleData.skill_gaps?.length > 0 && (
+                    <div className="career-modal-block">
+                      <div className="modal-subtitle">Skill gap focus</div>
+                      <div className="pill-row">
+                        {selectedRoleData.skill_gaps.map((skill) => (
+                          <span className="pill subtle" key={skill}>{skill}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p className="muted">No data available for this role.</p>
               )}
             </div>
           </div>

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from owlready2 import *
 import os
+import json
 from groq import Groq
 from dotenv import load_dotenv
 
@@ -18,6 +19,40 @@ client = Groq(api_key=GROQ_API_KEY)
 
 # Load ontology once at startup (absolute path) and provide a helper for reloads
 onto_world = None
+
+# Default career-role blueprint used for scoring and ontology seeding
+ROLE_BLUEPRINTS = {
+    "Software Engineer": {
+        "trait_targets": {
+            "Openness": {"target": 82, "weight": 0.22},
+            "Conscientiousness": {"target": 88, "weight": 0.30},
+            "Neuroticism": {"target": 28, "weight": 0.20},
+            "Agreeableness": {"target": 58, "weight": 0.14},
+            "Extraversion": {"target": 48, "weight": 0.14},
+        },
+        "skills": ["System Design", "Code Quality", "Problem Decomposition", "Stakeholder Communication"],
+    },
+    "Manager": {
+        "trait_targets": {
+            "Extraversion": {"target": 80, "weight": 0.28},
+            "Agreeableness": {"target": 78, "weight": 0.24},
+            "Conscientiousness": {"target": 84, "weight": 0.26},
+            "Openness": {"target": 70, "weight": 0.12},
+            "Neuroticism": {"target": 36, "weight": 0.10},
+        },
+        "skills": ["Coaching", "Decision Making", "Conflict Resolution", "Stakeholder Alignment"],
+    },
+    "Researcher": {
+        "trait_targets": {
+            "Openness": {"target": 90, "weight": 0.32},
+            "Conscientiousness": {"target": 76, "weight": 0.26},
+            "Extraversion": {"target": 38, "weight": 0.12},
+            "Agreeableness": {"target": 64, "weight": 0.14},
+            "Neuroticism": {"target": 34, "weight": 0.16},
+        },
+        "skills": ["Experimental Design", "Data Analysis", "Technical Writing", "Cross-team Collaboration"],
+    },
+}
 
 
 def ensure_custom_properties(o):
@@ -52,12 +87,123 @@ def ensure_custom_properties(o):
                 comment = ["Explainability report for the participant's scores"]
             created_new = True
 
+        # Career role fit extensions
+        cr = getattr(o, "CareerRole", None) or o.search_one(iri=f"{o.base_iri}CareerRole") or o.search_one(iri=f"{o.base_iri}#CareerRole")
+        if not cr:
+            class CareerRole(Thing):  # type: ignore
+                label = ["CareerRole"]
+            created_new = True
+
+        sk = getattr(o, "Skill", None) or o.search_one(iri=f"{o.base_iri}Skill") or o.search_one(iri=f"{o.base_iri}#Skill")
+        if not sk:
+            class Skill(Thing):  # type: ignore
+                label = ["Skill"]
+            created_new = True
+
+        trait_cls = getattr(o, "Trait", None) or o.search_one(iri=f"{o.base_iri}Trait") or o.search_one(name="Trait")
+        rt = getattr(o, "requiresTrait", None) or o.search_one(iri=f"{o.base_iri}requiresTrait") or o.search_one(iri=f"{o.base_iri}#requiresTrait")
+        if not rt and trait_cls:
+            class requiresTrait(ObjectProperty):  # type: ignore
+                domain = [o.CareerRole] if getattr(o, "CareerRole", None) else [Thing]
+                range = [trait_cls]
+                label = ["requiresTrait"]
+            created_new = True
+
+        rs = getattr(o, "requiresSkill", None) or o.search_one(iri=f"{o.base_iri}requiresSkill") or o.search_one(iri=f"{o.base_iri}#requiresSkill")
+        if not rs and getattr(o, "Skill", None):
+            class requiresSkill(ObjectProperty):  # type: ignore
+                domain = [o.CareerRole] if getattr(o, "CareerRole", None) else [Thing]
+                range = [o.Skill]
+                label = ["requiresSkill"]
+            created_new = True
+
+        tw = getattr(o, "traitWeight", None) or o.search_one(iri=f"{o.base_iri}traitWeight") or o.search_one(iri=f"{o.base_iri}#traitWeight")
+        if not tw:
+            class traitWeight(DataProperty):  # type: ignore
+                domain = [o.CareerRole]
+                range = [float]
+                label = ["traitWeight"]
+                comment = ["Relative importance (0-1) of traits required for a career role"]
+            created_new = True
+
+        rfs = getattr(o, "roleFitScore", None) or o.search_one(iri=f"{o.base_iri}roleFitScore") or o.search_one(iri=f"{o.base_iri}#roleFitScore")
+        if not rfs:
+            class roleFitScore(DataProperty):  # type: ignore
+                domain = [o.Participant]
+                range = [float, str]
+                label = ["roleFitScore"]
+                comment = ["Stores role-specific fit scores for a participant"]
+            created_new = True
+
     if created_new:
         try:
             o.save(file=ONTOLOGY_PATH, format="rdfxml")
             print("💾 Added missing custom properties to ontology file")
         except Exception as save_err:
             print(f"⚠️ Could not persist custom properties: {save_err}")
+
+
+def ensure_career_roles_seed(o):
+    """Seed core career roles, skills, and trait links so downstream scoring can attach data."""
+    try:
+        if not hasattr(o, "CareerRole") or not hasattr(o, "Skill"):
+            return
+
+        def safe_name(label):
+            return "_".join(label.split()).replace("/", "_").replace("-", "_")
+
+        with o:
+            for role_label, cfg in ROLE_BLUEPRINTS.items():
+                role_name = f"Role_{safe_name(role_label)}"
+                role = find_entity_by_id(o.CareerRole, role_name) or o.CareerRole(role_name)
+                try:
+                    role.label = [role_label]
+                except Exception:
+                    pass
+
+                trait_entities = []
+                weight_values = []
+                for trait_label, meta in cfg.get("trait_targets", {}).items():
+                    trait_entity = o.search_one(name=trait_label)
+                    if trait_entity is None:
+                        continue
+                    trait_entities.append(trait_entity)
+                    weight_values.append(meta.get("weight", 0.0))
+
+                if trait_entities:
+                    try:
+                        role.requiresTrait = list(trait_entities)
+                    except Exception:
+                        pass
+                if weight_values and hasattr(role, "traitWeight"):
+                    try:
+                        role.traitWeight = list(weight_values)
+                    except Exception:
+                        pass
+
+                skills = []
+                for skill_label in cfg.get("skills", [])[:4]:
+                    skill_name = f"Skill_{safe_name(skill_label)}"
+                    skill = find_entity_by_id(o.Skill, skill_name) or o.Skill(skill_name)
+                    try:
+                        skill.label = [skill_label]
+                    except Exception:
+                        pass
+                    skills.append(skill)
+
+                if skills:
+                    try:
+                        role.requiresSkill = skills
+                    except Exception:
+                        pass
+
+        try:
+            o.save(file=ONTOLOGY_PATH, format="rdfxml")
+            print("💾 Career roles and skills seeded into ontology")
+        except Exception as save_err:
+            print(f"⚠️ Could not persist career roles: {save_err}")
+    except Exception as seed_err:
+        print(f"⚠️ Could not seed career roles: {seed_err}")
 
 
 def load_ontology(force_reload=False):
@@ -70,6 +216,7 @@ def load_ontology(force_reload=False):
         onto_loaded = onto_obj.load(reload=force_reload)
         print(f"✅ Ontology loaded from {ONTOLOGY_PATH}")
         ensure_custom_properties(onto_loaded)
+        ensure_career_roles_seed(onto_loaded)
         return onto_loaded
     except Exception as e:
         print(f"❌ CRITICAL ERROR: Could not load ontology. {e}")
@@ -78,6 +225,7 @@ def load_ontology(force_reload=False):
 
 onto = load_ontology()
 ensure_custom_properties(onto)
+ensure_career_roles_seed(onto)
 
 # --- HELPER FUNCTIONS ---
 
@@ -219,6 +367,221 @@ def dedup_user_entities(user_id):
         assessment.hasScore = list(by_trait.values())
     except Exception:
         pass
+
+
+def get_participant_display_name(participant):
+    """Resolve the participant's display name safely across ontology variants."""
+    try:
+        if hasattr(onto, "name") and isinstance(onto.name, DataPropertyClass) and participant.name:
+            return str(participant.name[0])
+    except Exception:
+        pass
+
+    try:
+        if participant.label:
+            return str(participant.label[0])
+    except Exception:
+        pass
+
+    return getattr(participant, "name", "Participant")
+
+
+def extract_trait_percentages_for_participant(user_id):
+    """Return Big Five trait percentages for the participant, reading the latest ontology state."""
+    scores = {}
+    assessment = find_entity_by_id(onto.Assessment, f"Assessment_{user_id}") if hasattr(onto, "Assessment") else None
+    trait_scores = []
+
+    if assessment and hasattr(assessment, "hasScore"):
+        trait_scores = list(assessment.hasScore or [])
+    else:
+        try:
+            trait_scores = [ts for ts in onto.TraitScore.instances() if ts.name.startswith(f"Score_{user_id}_")]
+        except Exception:
+            trait_scores = []
+
+    for ts in trait_scores:
+        try:
+            val = 0.0
+            if hasattr(ts, "meanScore") and ts.meanScore:
+                val = float(ts.meanScore[0])
+            trait_name = ts.name.split('_')[-1] if '_' in ts.name else (
+                ts.scoresOnTrait[0].name if hasattr(ts, "scoresOnTrait") and ts.scoresOnTrait else "Trait"
+            )
+            scores[trait_name] = val
+        except Exception:
+            continue
+
+    return scores
+
+
+def score_role_fit(trait_scores):
+    """Compute per-role fit scores using ROLE_BLUEPRINTS and return detailed breakdown."""
+    role_results = {}
+    for role_name, cfg in ROLE_BLUEPRINTS.items():
+        total_weight = sum(meta.get("weight", 0.0) for meta in cfg.get("trait_targets", {}).values()) or 1.0
+        contributions = []
+        weighted_sum = 0.0
+
+        for trait_label, meta in cfg.get("trait_targets", {}).items():
+            target = meta.get("target", 70)
+            weight = meta.get("weight", 0.1)
+            actual = float(trait_scores.get(trait_label, 0.0))
+            proximity = max(0.0, 1.0 - abs(actual - target) / 100.0)
+            weighted = proximity * weight
+            weighted_sum += weighted
+            contributions.append({
+                "trait": trait_label,
+                "actual": round(actual, 2),
+                "target": target,
+                "weight": weight,
+                "closeness": round(proximity * 100, 2),
+            })
+
+        overall = round(max(0.0, min(100.0, (weighted_sum / total_weight) * 100)), 2)
+        role_results[role_name] = {
+            "score": overall,
+            "contributions": sorted(contributions, key=lambda c: c["closeness"], reverse=True),
+        }
+
+    ranking = sorted(role_results.keys(), key=lambda k: role_results[k]["score"], reverse=True)
+    return role_results, ranking
+
+
+ROLE_TRAIT_SKILL_GAPS = {
+    "Software Engineer": {
+        "Conscientiousness": ["Task Planning", "Test-Driven Development"],
+        "Openness": ["System Design Patterns", "Technical Architecture"],
+        "Neuroticism": ["Stress Management", "Incident Response Playbooks"],
+        "Extraversion": ["Stakeholder Communication", "Team Demos"],
+        "Agreeableness": ["Code Review Facilitation", "Pair Programming"],
+    },
+    "Manager": {
+        "Extraversion": ["Executive Presence", "Facilitation"],
+        "Agreeableness": ["Conflict Mediation", "Coaching"],
+        "Conscientiousness": ["Operational Cadence", "Prioritization"],
+        "Openness": ["Strategic Framing", "Innovation Workshops"],
+        "Neuroticism": ["Emotional Regulation", "Resilience Training"],
+    },
+    "Researcher": {
+        "Openness": ["Exploratory Research Methods", "Creative Prototyping"],
+        "Conscientiousness": ["Study Planning", "Documentation Rigor"],
+        "Extraversion": ["Conference Presentations", "Interviewing"],
+        "Agreeableness": ["Cross-team Collaboration", "Stakeholder Alignment"],
+        "Neuroticism": ["Experiment Recovery Plans", "Mindfulness"],
+    },
+}
+
+
+def suggest_skill_gaps(role_name, contributions):
+    """Pick two skills to develop based on the weakest contributing traits."""
+    ordered = sorted(contributions, key=lambda c: c["closeness"])
+    skills = []
+    for item in ordered:
+        trait = item.get("trait")
+        trait_skills = ROLE_TRAIT_SKILL_GAPS.get(role_name, {}).get(trait, [])
+        for skill in trait_skills:
+            if skill not in skills:
+                skills.append(skill)
+            if len(skills) >= 2:
+                return skills[:2]
+
+    fallback = ROLE_BLUEPRINTS.get(role_name, {}).get("skills", [])
+    for skill in fallback:
+        if skill not in skills:
+            skills.append(skill)
+        if len(skills) >= 2:
+            break
+
+    return skills[:2]
+
+
+def build_counterfactual_insight(contributions):
+    """Summarize which trait lifts would raise the role score most."""
+    weakest = sorted(contributions, key=lambda c: c["closeness"])[:2]
+    parts = []
+    for item in weakest:
+        trait = item.get("trait")
+        actual = item.get("actual", 0)
+        target = item.get("target", 0)
+        delta = max(0, target - actual) if target >= actual else max(0, actual - target)
+        direction = "increase" if target > actual else "reduce"
+        parts.append(f"{direction} {trait} by ~{round(abs(delta), 1)} points toward {target} to lift this role")
+    return "; ".join(parts) if parts else "Maintain current balance to keep this fit strong."
+
+
+def persist_role_fit_scores(participant, role_results):
+    """Store role fit scores on the participant using the roleFitScore data property."""
+    try:
+        participant.roleFitScore = []
+        for role, info in role_results.items():
+            participant.roleFitScore.append(f"{role}:{info.get('score', 0)}")
+    except Exception as exc:
+        print(f"⚠️ Could not persist role fit scores: {exc}")
+
+
+def generate_role_explanations(name, trait_scores, role_results):
+    """Use Groq to create concise explanations per role. Returns mapping role -> text payload."""
+    role_payload = {r: {
+        "score": data.get("score"),
+        "top_traits": [c["trait"] for c in sorted(data.get("contributions", []), key=lambda c: c["closeness"], reverse=True)[:3]],
+        "weak_traits": [c for c in sorted(data.get("contributions", []), key=lambda c: c["closeness"])[:2]],
+    } for r, data in role_results.items()}
+
+    prompt = f"""
+You are a concise career coach. Summarize role fit for {name} using the provided scores.
+
+Trait scores (0-100): {trait_scores}
+Role fit scores: { {k: v['score'] for k, v in role_results.items()} }
+
+For each role (Software Engineer, Manager, Researcher), produce JSON with keys:
+- role: role name
+- explanation: 2-3 sentences on why it fits or not (mention strengths and challenges)
+- strengths: array of 2 short bullet phrases
+- challenges: array of 2 short bullet phrases
+- counterfactual: one sentence on which trait change would most increase fit
+- skill_gaps: array of 2 skill recommendations to grow fit
+
+Keep total output compact and strictly valid JSON array.
+"""
+
+    try:
+        completion = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": "Return only JSON for career role fit."},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.5,
+        )
+        raw = completion.choices[0].message.content
+        data = json.loads(raw)
+        mapped = {}
+        for item in data:
+            role = item.get("role")
+            if not role:
+                continue
+            mapped[role] = {
+                "explanation": item.get("explanation", ""),
+                "strengths": item.get("strengths", []),
+                "challenges": item.get("challenges", []),
+                "counterfactual": item.get("counterfactual", ""),
+                "skill_gaps": item.get("skill_gaps", []),
+            }
+        return mapped
+    except Exception as exc:
+        print(f"⚠️ Groq role explanation fallback: {exc}")
+        # Fallback deterministic explanations
+        mapped = {}
+        for role, info in role_results.items():
+            mapped[role] = {
+                "explanation": f"Role fit at {info['score']}%. Strongest traits: {', '.join([c['trait'] for c in info['contributions'][:2]])}.",
+                "strengths": [c["trait"] for c in info.get("contributions", [])[:2]],
+                "challenges": [c["trait"] for c in info.get("contributions", [])[-2:]],
+                "counterfactual": build_counterfactual_insight(info.get("contributions", [])),
+                "skill_gaps": suggest_skill_gaps(role, info.get("contributions", [])),
+            }
+        return mapped
 
 def calculate_performance_scores(final_scores):
     job_perf = 3.0
@@ -459,6 +822,75 @@ def get_justification(participant_id):
         return jsonify({"found": True, "justification": justification_text}), 200
     except Exception as e:
         print(f"❌ ERROR fetching justification: {e}")
+        return jsonify({"found": False, "message": "internal error"}), 500
+
+
+@app.route('/api/career-fit/<participant_id>', methods=['GET'])
+def get_career_fit(participant_id):
+    """Return career role fit scores, explanations, skill gaps, and counterfactual insights."""
+    global onto
+    user_id = normalize_user_id(participant_id)
+    if not user_id:
+        return jsonify({"found": False, "message": "id is required"}), 400
+
+    try:
+        onto = load_ontology(force_reload=True)
+        ensure_custom_properties(onto)
+        ensure_career_roles_seed(onto)
+
+        participant = find_entity_by_id(onto.Participant, f"Participant_{user_id}") if hasattr(onto, "Participant") else None
+        if not participant:
+            return jsonify({"found": False, "message": "not found"}), 200
+
+        trait_scores = extract_trait_percentages_for_participant(user_id)
+        if not trait_scores:
+            return jsonify({"found": False, "message": "Trait scores unavailable for this participant"}), 200
+
+        role_results, ranking = score_role_fit(trait_scores)
+        explanations = generate_role_explanations(get_participant_display_name(participant), trait_scores, role_results)
+
+        # Shape response per role
+        response_roles = {}
+        for role, info in role_results.items():
+            role_expl = explanations.get(role, {})
+            raw_skill_gaps = role_expl.get("skill_gaps")
+            skill_gaps = raw_skill_gaps if isinstance(raw_skill_gaps, list) else suggest_skill_gaps(role, info.get("contributions", []))
+            raw_strengths = role_expl.get("strengths")
+            strengths = raw_strengths if isinstance(raw_strengths, list) else ([raw_strengths] if raw_strengths else [])
+            raw_challenges = role_expl.get("challenges")
+            challenges = raw_challenges if isinstance(raw_challenges, list) else ([raw_challenges] if raw_challenges else [])
+            counterfactual = role_expl.get("counterfactual") or build_counterfactual_insight(info.get("contributions", []))
+            response_roles[role] = {
+                "score": info.get("score", 0),
+                "explanation": role_expl.get("explanation", ""),
+                "strengths": strengths,
+                "challenges": challenges,
+                "skill_gaps": skill_gaps,
+                "counterfactual": counterfactual,
+                "traits": info.get("contributions", []),
+            }
+
+        # Persist role fit scores back to ontology
+        try:
+            with onto:
+                persist_role_fit_scores(participant, role_results)
+            onto.save(file=ONTOLOGY_PATH, format="rdfxml")
+        except Exception as save_err:
+            print(f"⚠️ Could not save role fit scores: {save_err}")
+
+        ranking_payload = [
+            {"role": r, "score": role_results[r]["score"], "position": idx + 1}
+            for idx, r in enumerate(ranking)
+        ]
+
+        return jsonify({
+            "found": True,
+            "roles": response_roles,
+            "ranking": ranking_payload,
+            "top_recommendation": ranking[0] if ranking else None,
+        }), 200
+    except Exception as e:
+        print(f"❌ ERROR computing career fit: {e}")
         return jsonify({"found": False, "message": "internal error"}), 500
 
 
