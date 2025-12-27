@@ -105,7 +105,7 @@ const Landing = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="page">
+    <div className="page landing-page">
       <header className="nav">
         <div className="nav-left">
           <div className="badge">PI</div>

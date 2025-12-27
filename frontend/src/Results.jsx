@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
+const API_BASE = window.location.port === '5173' ? 'http://localhost:5000' : '';
+
 const Results = () => {
   const [payload, setPayload] = useState(null);
+  const [selectedSection, setSelectedSection] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [justificationText, setJustificationText] = useState('');
+  const [justificationLoading, setJustificationLoading] = useState(false);
+  const [justificationError, setJustificationError] = useState('');
 
   useEffect(() => {
     const stored = localStorage.getItem('pi_result');
@@ -13,6 +20,50 @@ const Results = () => {
       }
     }
   }, []);
+
+  useEffect(() => {
+    const fetchJustification = async () => {
+      if (!payload?.userId) return;
+      setJustificationLoading(true);
+      setJustificationError('');
+      try {
+        const res = await fetch(`${API_BASE}/api/justification/${encodeURIComponent(payload.userId)}`);
+        const data = await res.json();
+        if (!data?.found) {
+          setJustificationError(data?.message || 'No justification found.');
+          setJustificationText('');
+        } else {
+          setJustificationText(data.justification || '');
+        }
+      } catch (e) {
+        setJustificationError('Could not load justification.');
+      } finally {
+        setJustificationLoading(false);
+      }
+    };
+
+    fetchJustification();
+  }, [payload?.userId]);
+
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const handler = (e) => {
+      if (e.key === 'Escape') setIsModalOpen(false);
+    };
+    window.addEventListener('keydown', handler);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden'; // Lock background scroll while modal is open
+    return () => window.removeEventListener('keydown', handler);
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModalOpen]);
 
   if (!payload) {
     return (
@@ -35,6 +86,108 @@ const Results = () => {
   const { name, userId, result } = payload;
   const scores = result?.scores || {};
   const performance = result?.performance || {};
+
+  const allSections = [
+    'Trait-by-Trait Justification',
+    'Agreeableness',
+    'Conscientiousness',
+    'Extraversion',
+    'Neuroticism',
+    'Openness',
+    'Academic Performance Justification',
+    'Academic Performance',
+    'Job Performance Justification',
+    'Job Performance',
+    'Plain-English Summary'
+  ];
+
+  const isPerformanceSection = (section) => section?.toLowerCase().includes('performance');
+
+  const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  const extractSectionContent = (text, sectionName) => {
+    if (!text) return '';
+    const lines = text.split(/\r?\n/);
+    const isPerformance = isPerformanceSection(sectionName);
+
+    const aliases = [sectionName];
+    if (sectionName === 'Job Performance') aliases.unshift('Job Performance Justification');
+    if (sectionName === 'Academic Performance') aliases.unshift('Academic Performance Justification');
+
+    for (const name of aliases) {
+      const startIndex = lines.findIndex((line) => line.toLowerCase().includes(name.toLowerCase()));
+      if (startIndex !== -1) {
+        const nextIndex = lines.slice(startIndex + 1).findIndex((line) => {
+          return allSections.some((sec) => line.toLowerCase().includes(sec.toLowerCase()));
+        });
+        const endIndex = nextIndex === -1 ? lines.length : startIndex + 1 + nextIndex;
+        const chunk = lines.slice(startIndex, endIndex).join('\n').trim();
+        const contentLines = chunk.split(/\r?\n/).filter((l) => l.trim() !== '');
+        if (contentLines.length >= (isPerformance ? 2 : 1)) return chunk;
+      }
+    }
+
+    // Trait-specific keyword search inside the whole text
+    const matched = lines.filter((line) => line.toLowerCase().includes(sectionName.toLowerCase()));
+    if (matched.length >= (isPerformance ? 2 : 1)) return matched.join('\n').trim();
+
+    // Fallback: only return full text for performance sections; otherwise empty to avoid bleed
+    return isPerformance ? text.trim() : '';
+  };
+
+  const cleanSectionText = (raw, sectionName) => {
+    if (!raw) return '';
+    const lines = raw.split(/\r?\n/).filter((l) => l.trim() !== '');
+    if (!lines.length) return raw;
+    const normalizedSection = sectionName.toLowerCase();
+    const isPerformance = isPerformanceSection(sectionName);
+
+    // Strip the trait heading prefix from the first line while keeping its descriptive text
+    const headingRegex = new RegExp(
+      `^\\s*[-*\\d\\.\\)]*\\s*\\**${escapeRegExp(sectionName)}\\s*(?:\\([^)]*\\))?\\s*\\**\\s*:?\\s*`,
+      'i'
+    );
+
+    const cleanedLines = lines.map((line, idx) => {
+      if (idx > 0) return line; // Only the first line can carry the heading prefix
+      const plain = line.toLowerCase();
+      // Strip explicit "Justification" heading lines (e.g., "Justification**")
+      if (/^\s*justification\**\s*:?\s*$/i.test(line)) return '';
+      // Strip trait headings like "- **Agreeableness (58.0):**"
+      if (plain.includes(normalizedSection)) {
+        const strippedHeading = line.replace(headingRegex, '').trim();
+        const strippedBullet = strippedHeading.replace(/^\s*([*-]|\d+\.)\s*/, '').trim();
+        const cleaned = strippedBullet || strippedHeading;
+        if (cleaned.length < 2) return '';
+        return cleaned;
+      }
+      // If the line begins with a bullet, drop the marker
+      const bulletStripped = line.replace(/^\s*([*-]|\d+\.)\s*/, '').trim();
+      return bulletStripped || line;
+    });
+
+    // Remove any standalone justification headings from any position
+    const cleanedWithoutHeadings = cleanedLines.filter((l) => !/^\s*justification\**\s*:?\s*$/i.test(l.trim()));
+
+    let rebuilt = cleanedWithoutHeadings.join('\n').trim();
+    // Final safeguard: drop a leading bullet/asterisk at start of content
+    rebuilt = rebuilt.replace(/^\s*[*-]\s*/, '');
+    const nonEmptyCount = rebuilt.split(/\r?\n/).filter((l) => l.trim() !== '').length;
+
+    // Traits: accept any non-empty cleaned text, even single-line/short
+    if (!isPerformance && rebuilt) return rebuilt;
+
+    // Performance sections: allow short single-line cleaned content to show, as long as it's not empty
+    if (isPerformance && rebuilt && nonEmptyCount >= 1) return rebuilt;
+
+    // Fallback: only return raw for performance; traits fall back to cleaned (which may be empty)
+    return isPerformance ? raw : rebuilt;
+  };
+
+  const handleCardClick = (section) => {
+    setSelectedSection(section);
+    setIsModalOpen(true);
+  };
 
   // Simple Markdown Parser for the specific format returned by the AI
   const renderAnalysis = (text) => {
@@ -138,7 +291,14 @@ const Results = () => {
             </div>
             <div className="scores-grid">
               {Object.entries(scores).map(([trait, score]) => (
-                <div className="score-item" key={trait}>
+                <div
+                  className="score-item clickable"
+                  key={trait}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => handleCardClick(trait)}
+                  onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleCardClick(trait)}
+                >
                   <div className="score-trait">{trait}</div>
                   <div className="score-value">{score}</div>
                   <div className="score-bar-container">
@@ -155,11 +315,23 @@ const Results = () => {
               <div className="muted small">Projected readiness</div>
             </div>
             <div className="performance-grid">
-              <div className="performance-item">
+              <div
+                className="performance-item clickable"
+                role="button"
+                tabIndex={0}
+                onClick={() => handleCardClick('Job Performance')}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleCardClick('Job Performance')}
+              >
                 <div className="performance-label">Job Performance</div>
                 <div className="performance-value">{performance.JobPerformance}%</div>
               </div>
-              <div className="performance-item">
+              <div
+                className="performance-item clickable"
+                role="button"
+                tabIndex={0}
+                onClick={() => handleCardClick('Academic Performance')}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleCardClick('Academic Performance')}
+              >
                 <div className="performance-label">Academic Performance</div>
                 <div className="performance-value">{performance.AcademicPerformance}%</div>
               </div>
@@ -179,6 +351,34 @@ const Results = () => {
           )}
         </section>
       </main>
+
+      {isModalOpen && (
+        <div className="modal-backdrop" onClick={() => setIsModalOpen(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 className="modal-title">{selectedSection}</h3>
+              <button className="modal-close" onClick={() => setIsModalOpen(false)} aria-label="Close justification modal">
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              {justificationLoading && <p className="muted">Loading justification…</p>}
+              {!justificationLoading && justificationError && <p className="muted">{justificationError}</p>}
+              {!justificationLoading && !justificationError && (
+                <pre className="justification-text">
+                  {(() => {
+                    const rawSection = extractSectionContent(justificationText, selectedSection);
+                    const useFallback = isPerformanceSection(selectedSection);
+                    const fallback = useFallback ? (justificationText || '') : '';
+                    const cleaned = cleanSectionText(rawSection || fallback, selectedSection);
+                    return cleaned || fallback || 'No justification available for this section.';
+                  })()}
+                </pre>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

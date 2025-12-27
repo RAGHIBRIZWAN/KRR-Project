@@ -20,6 +20,46 @@ client = Groq(api_key=GROQ_API_KEY)
 onto_world = None
 
 
+def ensure_custom_properties(o):
+    """Ensure custom data properties exist on the ontology even after reloads."""
+    created_new = False
+    with o:
+        jp = getattr(o, "jobPerformance", None) or o.search_one(iri=f"{o.base_iri}jobPerformance") or o.search_one(iri=f"{o.base_iri}#jobPerformance")
+        if not jp:
+            class jobPerformance(DataProperty):  # type: ignore
+                domain = [o.Participant]
+                range = [float]
+                label = ["jobPerformance"]
+                comment = ["Calculated predicted score for Job Performance"]
+            created_new = True
+
+        ap = getattr(o, "academicPerformance", None) or o.search_one(iri=f"{o.base_iri}academicPerformance") or o.search_one(iri=f"{o.base_iri}#academicPerformance")
+        if not ap:
+            class academicPerformance(DataProperty):  # type: ignore
+                domain = [o.Participant]
+                range = [float]
+                label = ["academicPerformance"]
+                comment = ["Calculated predicted score for Academic Performance"]
+            created_new = True
+
+        hj = getattr(o, "hasJustificationReport", None) or o.search_one(iri=f"{o.base_iri}hasJustificationReport") or o.search_one(iri=f"{o.base_iri}#hasJustificationReport")
+        if not hj:
+            class hasJustificationReport(DataProperty):  # type: ignore
+                """Stores the generated justification narrative for a participant."""
+                domain = [o.Participant]
+                range = [str]
+                label = ["hasJustificationReport"]
+                comment = ["Explainability report for the participant's scores"]
+            created_new = True
+
+    if created_new:
+        try:
+            o.save(file=ONTOLOGY_PATH, format="rdfxml")
+            print("💾 Added missing custom properties to ontology file")
+        except Exception as save_err:
+            print(f"⚠️ Could not persist custom properties: {save_err}")
+
+
 def load_ontology(force_reload=False):
     """Load ontology from disk. For force_reload, build a fresh World to avoid stale in-memory duplicates."""
     global onto_world
@@ -29,6 +69,7 @@ def load_ontology(force_reload=False):
         onto_obj = onto_world.get_ontology(ONTOLOGY_PATH)
         onto_loaded = onto_obj.load(reload=force_reload)
         print(f"✅ Ontology loaded from {ONTOLOGY_PATH}")
+        ensure_custom_properties(onto_loaded)
         return onto_loaded
     except Exception as e:
         print(f"❌ CRITICAL ERROR: Could not load ontology. {e}")
@@ -36,23 +77,7 @@ def load_ontology(force_reload=False):
 
 
 onto = load_ontology()
-
-# --- ADD THIS BLOCK: DEFINE MISSING PROPERTIES ---
-with onto:
-    # Property for Job Performance Score
-    class jobPerformance(DataProperty):
-        domain = [onto.Participant]
-        range = [float]
-        label = ["jobPerformance"]
-        comment = ["Calculated predicted score for Job Performance"]
-
-    # Property for Academic Performance Score
-    class academicPerformance(DataProperty):
-        domain = [onto.Participant]
-        range = [float]
-        label = ["academicPerformance"]
-        comment = ["Calculated predicted score for Academic Performance"]
-# -------------------------------------------------
+ensure_custom_properties(onto)
 
 # --- HELPER FUNCTIONS ---
 
@@ -257,6 +282,59 @@ def get_groq_suggestions(scores, name):
     except Exception as e:
         return f"Error getting suggestions: {str(e)}"
 
+
+def generate_justification_report(big_five_scores, performance_predictions, answered_questions):
+    """Generate an explainable justification report via Groq."""
+    if not GROQ_API_KEY:
+        return "Groq API key not configured; justification unavailable."
+
+    # Build question evidence block
+    question_lines = []
+    for idx, q in enumerate(answered_questions, start=1):
+        q_text = q.get("question_text", "Unknown question")
+        trait = q.get("trait", "Unknown")
+        ans = q.get("answer", "?")
+        reverse_note = " (reverse-coded)" if q.get("is_reverse_coded") else ""
+        effective = q.get("effective_score")
+        effective_note = f" -> effective score {effective}" if effective is not None else ""
+        question_lines.append(f"{idx}. \"{q_text}\" | Trait: {trait} | Answer: {ans}{reverse_note}{effective_note}")
+
+    system_prompt = "You are an Industrial-Organizational Psychologist providing explainable personality assessments."
+
+    user_instructions = f"""
+USER TASK:
+- Explain trait-by-trait why the user received each Big Five score.
+- Reference patterns in the user's answers and cite example questions in natural language.
+- Explain how traits influenced Academic and Job performance predictions.
+- Avoid generic descriptions and do not invent data.
+
+DATA CONTEXT:
+- Big Five Scores (0-100): {big_five_scores}
+- Performance Predictions: {performance_predictions}
+- Answered Questions:
+{os.linesep.join(question_lines) if question_lines else 'No responses provided'}
+
+RESPONSE STRUCTURE (keep this order):
+1. Trait-by-Trait Justification
+2. Academic Performance Justification
+3. Job Performance Justification
+4. Plain-English Summary
+"""
+
+    try:
+        completion = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_instructions},
+            ],
+            temperature=0.4,
+        )
+        return completion.choices[0].message.content
+    except Exception as exc:
+        print(f"❌ ERROR generating justification: {exc}")
+        return "Justification could not be generated at this time."
+
 # --- ROUTES ---
 
 @app.route('/')
@@ -355,6 +433,35 @@ def get_previous_result():
         return jsonify({"found": False, "message": "internal error"}), 500
 
 
+@app.route('/api/justification/<participant_id>', methods=['GET'])
+def get_justification(participant_id):
+    global onto
+    user_id = normalize_user_id(participant_id)
+    if not user_id:
+        return jsonify({"found": False, "message": "id is required"}), 400
+
+    try:
+        onto = load_ontology(force_reload=True)
+        ensure_custom_properties(onto)
+        participant = find_entity_by_id(onto.Participant, f"Participant_{user_id}")
+
+        if not participant:
+            return jsonify({"found": False, "message": "not found"}), 200
+
+        justification_text = ""
+        if hasattr(participant, 'hasJustificationReport') and participant.hasJustificationReport:
+            justification_text = str(participant.hasJustificationReport[-1])
+            print(f"📤 Returning justification for {participant.name if hasattr(participant,'name') else participant}: {justification_text[:120]}...")
+
+        if not justification_text:
+            justification_text = "Justification not available for this participant. Please re-run the assessment."
+
+        return jsonify({"found": True, "justification": justification_text}), 200
+    except Exception as e:
+        print(f"❌ ERROR fetching justification: {e}")
+        return jsonify({"found": False, "message": "internal error"}), 500
+
+
 @app.route('/get_questions', methods=['GET'])
 def get_questions():
     questions_data = []
@@ -418,11 +525,13 @@ def submit_assessment():
     global onto
     # Reload ontology to ensure we see existing individuals before creating any
     onto = load_ontology(force_reload=True)
+    ensure_custom_properties(onto)
 
     data = request.json
     user_id = normalize_user_id(data.get('id', 'Unknown'))
     user_name = data.get('name', 'Anonymous')
     answers = data.get('answers', {})
+    answered_questions_data = []
     
     # 1. Calculate trait totals
     trait_totals = {}
@@ -438,6 +547,13 @@ def submit_assessment():
             raw_val = int(answers[q_id])
             final_val = (6 - raw_val) if details['is_reverse'] else raw_val
             trait_totals[trait].append(final_val)
+            answered_questions_data.append({
+                "question_text": details['text'],
+                "trait": details['trait'],
+                "answer": raw_val,
+                "is_reverse_coded": details['is_reverse'],
+                "effective_score": final_val
+            })
 
     # Aggregate scores
     raw_scores = {}
@@ -460,6 +576,7 @@ def submit_assessment():
     # Performance and AI suggestions
     perf_scores = calculate_performance_scores(raw_scores)
     suggestions = get_groq_suggestions(numeric_percentages, user_name)
+    justification_report = generate_justification_report(numeric_percentages, perf_scores, answered_questions_data) or "Justification not available."
     print(f"💾 Attempting to save data for user: {user_name}...")
     try:
         with onto:
@@ -511,9 +628,16 @@ def submit_assessment():
             # Replace assessment.hasScore with expected set (no destroys) and persist
             assessment.hasScore = expected_scores
 
+            # Attach justification report
+            participant.hasJustificationReport = []
+            participant.hasJustificationReport = [justification_report]
+            print(f"   📝 Justification attached (len={len(participant.hasJustificationReport)}): {participant.hasJustificationReport[-1][:120]}...")
+
         # Save and reload to make sure state is consistent
         onto.save(file=ONTOLOGY_PATH, format="rdfxml")
+        print("💾 Ontology saved with justification report")
         onto = load_ontology(force_reload=True)
+        ensure_custom_properties(onto)
         print("✅ Data successfully saved to project.rdf")
 
     except Exception as e:

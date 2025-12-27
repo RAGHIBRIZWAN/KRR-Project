@@ -383,6 +383,13 @@
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">traitScore</rdfs:label>
 </owl:DatatypeProperty>
 
+<owl:DatatypeProperty rdf:about="#hasJustificationReport">
+  <rdfs:domain rdf:resource="#Participant"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hasJustificationReport</rdfs:label>
+  <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Explainability report for the participant's scores</rdfs:comment>
+</owl:DatatypeProperty>
+
 <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/creator"/>
 
 <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/description"/>
@@ -1492,27 +1499,50 @@
 <owl:NamedIndividual rdf:about="#Score_hr1_Neuroticism">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Neuroticism"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">46.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">58.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Extraversion">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Extraversion"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">66.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Openness">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Openness"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">52.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">64.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Participant_hr1">
   <rdf:type rdf:resource="#Participant"/>
   <participantID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hr1</participantID>
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">umar</rdfs:label>
-  <jobPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.22</jobPerformance>
-  <academicPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">58.38</academicPerformance>
+  <jobPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">59.62</jobPerformance>
+  <academicPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">59.28</academicPerformance>
+  <hasJustificationReport rdf:datatype="http://www.w3.org/2001/XMLSchema#string">**1. Trait-by-Trait Justification**
+
+- **Agreeableness (58.0):** Your score indicates a somewhat neutral stance on agreeableness. This is reflected in your mixed responses to questions about concern for others. For instance, you answered that you "feel little concern for others" (effective score 3) and "I am not interested in other people's problems" (effective score 5), suggesting lower agreeableness. However, you also showed some empathy with answers like "I have a soft heart" (effective score 4) and "I take time out for others" (effective score 3), indicating a capacity for kindness and consideration. This balance results in a mid-range score.
+
+- **Conscientiousness (54.0):** Your conscientiousness score is slightly below the midpoint, suggesting you might not always be diligent or organized. Questions like "I leave my belongings around" (effective score 3) and "I shirk my duties" (effective score 3) indicate a tendency towards disorganization and lack of responsibility. However, answers such as "I like order" (effective score 4) and "I follow a schedule" (effective score 2) show some inclination towards orderliness and planning, albeit not consistently.
+
+- **Neuroticism (58.0):** With a neuroticism score around the midpoint, you seem to experience emotional instability to a moderate degree. Your responses to questions about feeling relaxed, getting stressed out easily, and mood swings were varied. For example, "I am relaxed most of the time" (effective score 3) and "I seldom feel blue" (effective score 5) suggest calmness, while "I get stressed out easily" (effective score 3), "I often feel blue" (effective score 2), and "I get upset easily" (effective score 4) indicate susceptibility to negative emotions.
+
+- **Extraversion (66.0):** Your extraversion score is above the midpoint, indicating you tend to be outgoing and sociable. This is evident in answers like "I am the life of the party" (effective score 3), "I start conversations" (effective score 4), and "I talk to a lot of different people at parties" (effective score 4), showing a preference for social interaction and being around people. However, some responses, such as "I am quiet around strangers" (effective score 4) and "I don't mind being the center of attention" (effective score 2), suggest a bit of reserve or selectivity in social situations.
+
+- **Openness (64.0):** With an openness score above the midpoint, you demonstrate a relatively high level of curiosity and openness to experience. Answers like "I have a rich vocabulary" (effective score 3), "I am full of ideas" (effective score 4), and "I have excellent ideas" (effective score 4) indicate a creative and imaginative mind. Additionally, "I am quick to understand things" (effective score 3) and "I spend time reflecting on things" (effective score 2) suggest an inclination towards intellectual pursuits and self-reflection.
+
+**2. Academic Performance Justification**
+
+Your predicted academic performance score is 59.28, which is slightly below the midpoint. This prediction can be understood by looking at your trait scores. While your openness to experience (64.0) suggests a potential for academic curiosity and creativity, your conscientiousness score (54.0) indicates you might struggle with organization, time management, and diligence, which are crucial for academic success. Additionally, your neuroticism score (58.0) suggests you may experience stress and emotional instability, which can impact academic performance. However, your extraversion (66.0) could facilitate learning in social and interactive academic environments.
+
+**3. Job Performance Justification**
+
+Your predicted job performance score is 59.62, which is also slightly below the midpoint. This can be attributed to several factors. Your extraversion score (66.0) is a positive factor, as it suggests you would perform well in team-oriented and customer-facing roles. Your openness to experience (64.0) could also be an asset in jobs requiring innovation and problem-solving. However, your lower conscientiousness score (54.0) may hinder your ability to meet deadlines, follow procedures, and maintain a high level of productivity, which are essential for job success. Furthermore, your neuroticism score (58.0) indicates potential challenges with stress management and emotional stability in the workplace.
+
+**4. Plain-English Summary**
+
+In essence, your personality profile suggests you are a sociable and imaginative individual with a moderate level of emotional stability. You have the potential to excel in social and creative contexts but may face challenges with organization, time management, and stress. Your predicted performance in both academic and job settings is slightly below average, primarily due to potential issues with diligence and emotional stability. However, with self-awareness and strategies to manage your weaknesses, you can leverage your strengths in extraversion and openness to experience to achieve success in various pursuits.</hasJustificationReport>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#['ali']">
