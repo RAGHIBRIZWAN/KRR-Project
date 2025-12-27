@@ -71,8 +71,11 @@ const Assessment = () => {
   };
 
   const submit = async () => {
-    // Check if all questions are answered
-    const unansweredCount = total - Object.keys(answers).length;
+    // Check if all questions are answered with valid values (1-5)
+    const validAnswers = Object.entries(answers).filter(
+      ([, val]) => val !== null && val !== undefined && val >= 1 && val <= 5
+    );
+    const unansweredCount = total - validAnswers.length;
     if (unansweredCount > 0) {
       setToast({ type: 'info', msg: `Please answer all questions. ${unansweredCount} remaining.` });
       return;
