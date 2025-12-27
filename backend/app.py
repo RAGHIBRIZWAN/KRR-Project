@@ -157,11 +157,36 @@ def ensure_career_roles_seed(o):
 
         def safe_name(label):
             return "_".join(label.split()).replace("/", "_").replace("-", "_")
+        
+        def local_find_entity(cls, entity_name, ontology):
+            """Local entity finder for use during initialization."""
+            base = ontology.base_iri
+            candidates = []
+            if base.endswith('#'):
+                candidates.append(f"{base}{entity_name}")
+            else:
+                candidates.append(f"{base}#{entity_name}")
+            if base.endswith('/'):
+                candidates.append(f"{base}{entity_name}")
+            else:
+                candidates.append(f"{base}/{entity_name}")
+            candidates.append(entity_name)
+            
+            for iri in candidates:
+                found = ontology.search_one(iri=iri)
+                if found:
+                    return found
+            
+            if hasattr(cls, "instances"):
+                for inst in cls.instances():
+                    if inst.name == entity_name:
+                        return inst
+            return None
 
         with o:
             for role_label, cfg in ROLE_BLUEPRINTS.items():
                 role_name = f"Role_{safe_name(role_label)}"
-                role = find_entity_by_id(o.CareerRole, role_name) or o.CareerRole(role_name)
+                role = local_find_entity(o.CareerRole, role_name, o) or o.CareerRole(role_name)
                 try:
                     role.label = [role_label]
                 except Exception:
@@ -190,7 +215,7 @@ def ensure_career_roles_seed(o):
                 skills = []
                 for skill_label in cfg.get("skills", [])[:4]:
                     skill_name = f"Skill_{safe_name(skill_label)}"
-                    skill = find_entity_by_id(o.Skill, skill_name) or o.Skill(skill_name)
+                    skill = local_find_entity(o.Skill, skill_name, o) or o.Skill(skill_name)
                     try:
                         skill.label = [skill_label]
                     except Exception:
