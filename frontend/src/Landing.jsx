@@ -87,16 +87,31 @@ const featureCards = [
   }
 ];
 
+const valueProps = [
+  {
+    title: 'Explainable role fit',
+    desc: 'Ontology-driven Role → Skill → Trait mapping with counterfactuals for transparent recommendations.'
+  },
+  {
+    title: 'Semantic knowledge graph',
+    desc: 'Everything persists as RDF/OWL entities, ready for SPARQL queries, cohort analysis, and reasoning.'
+  },
+  {
+    title: 'Narrative intelligence',
+    desc: 'Groq turns scores into plain-English stories so stakeholders see signal, not just numbers.'
+  }
+];
+
 const howSteps = [
-  'Questions load from the ontology. Every item is typed with traits and reverse-coding flags.',
+  'Questions load from the ontology. Every item is typed with traits, skill links, and reverse-coding flags.',
   'Scores compute instantly. Reverse items flip, traits average, and percentages render for clarity.',
-  'Performance signals derive. Weighted models project job and academic performance bands.',
-  'AI crafts the story. A Groq prompt turns numbers into a concise, human-readable profile.',
-  'Everything is saved semantically. Participants, assessments, and trait scores persist in RDF/OWL.'
+  'Performance signals derive. Weighted models project job and academic readiness.',
+  'AI crafts the story and role fit. Groq narrates the profile and explains the Role → Skill → Trait mapping.',
+  'Everything is saved semantically. Participants, assessments, trait scores, skills, roles, and explanations persist in RDF/OWL.'
 ];
 
 const stats = [
-  { label: 'Core traits mapped to every question', value: '5' },
+  { label: '5 core traits semantically mapped to each assessment question.', value: '5' },
   { label: 'Performance signals: job & academic', value: '2' },
   { label: 'Data stored with semantic structure', value: '100%' }
 ];
@@ -155,6 +170,22 @@ const Landing = () => {
           </div>
         </section>
 
+        <section className="panel" id="capabilities">
+          <div className="section-header">
+            <div className="pill subtle">What you get</div>
+            <div className="muted small">Explainable, ontology-driven, ready for teams and cohorts</div>
+          </div>
+          <div className="highlight-grid">
+            {valueProps.map((item) => (
+              <div className="highlight-card" key={item.title}>
+                <div className="spark-pill">New</div>
+                <h3>{item.title}</h3>
+                <p className="muted small">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section className="panel" id="why">
           <h2>Why this assessment</h2>
           <p className="muted">Fast signal on how people collaborate, learn, and deliver. Use it for hiring screens, team formation, or student coaching.</p>
@@ -178,9 +209,9 @@ const Landing = () => {
         </section>
 
         <section className="panel" id="ontology">
-          <h2>Ontology & Data Model</h2>
+          <h2>Semantic Intelligence & Ontology Layer</h2>
           <p className="muted">
-            Unlike traditional systems, our platform stores all assessment data in an RDF/OWL ontology, enabling semantic reasoning, querying, and future AI integration.
+            All assessment data is stored in an RDF/OWL knowledge graph, enabling semantic reasoning, explainable role-fit inference, and future AI integration.
           </p>
           
           <div className="grid stats">
@@ -192,7 +223,24 @@ const Landing = () => {
                 <span className="tag">Assessment</span>
                 <span className="tag">PersonalityTrait</span>
                 <span className="tag">TraitScore</span>
+                <span className="tag">Skill</span>
+                <span className="tag">Role</span>
+                <span className="tag">RoleFitExplanation</span>
                 <span className="tag">PerformancePrediction</span>
+              </div>
+
+              <div className="mapping-block">
+                <div className="pill subtle">Role → Skill → Trait Mapping</div>
+                <div className="mapping-chain">
+                  <span className="mapping-chip">PersonalityTrait</span>
+                  <span className="mapping-arrow">→</span>
+                  <span className="mapping-chip">Skill</span>
+                  <span className="mapping-arrow">→</span>
+                  <span className="mapping-chip">Role</span>
+                </div>
+                <p className="mapping-caption">
+                  Traits enable skills, and skills are mapped to professional roles through semantic relationships.
+                </p>
               </div>
             </div>
             <div className="card stats-col">
