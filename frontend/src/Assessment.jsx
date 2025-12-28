@@ -26,6 +26,7 @@ const Assessment = () => {
   const [name, setName] = useState('');
   const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingQuestions, setLoadingQuestions] = useState(true);
   const [loadingPrevious, setLoadingPrevious] = useState(false);
   const [toast, setToast] = useState(null);
 
@@ -40,12 +41,22 @@ const Assessment = () => {
     setUserId(savedId);
 
     const load = async () => {
+      setLoadingQuestions(true);
       try {
         const res = await fetch(`${API_BASE}/get_questions`);
+        if (!res.ok) {
+          throw new Error(`Server returned ${res.status}`);
+        }
         const data = await res.json();
-        setQuestions(data || []);
+        if (!data || !Array.isArray(data) || data.length === 0) {
+          setToast({ type: 'error', msg: 'No questions available. Please check the server configuration.' });
+          return;
+        }
+        setQuestions(data);
       } catch (e) {
         setToast({ type: 'error', msg: 'Could not load questions. Is the server running?' });
+      } finally {
+        setLoadingQuestions(false);
       }
     };
     load();
@@ -60,6 +71,16 @@ const Assessment = () => {
   };
 
   const submit = async () => {
+    // Check if all questions are answered with valid values (1-5)
+    const validAnswers = Object.entries(answers).filter(
+      ([, val]) => val !== null && val !== undefined && val >= 1 && val <= 5
+    );
+    const unansweredCount = total - validAnswers.length;
+    if (unansweredCount > 0) {
+      setToast({ type: 'info', msg: `Please answer all questions. ${unansweredCount} remaining.` });
+      return;
+    }
+    
     setLoading(true);
     try {
       const res = await fetch(`${API_BASE}/submit_assessment`, {
@@ -68,6 +89,12 @@ const Assessment = () => {
         body: JSON.stringify({ name, id: userId, answers })
       });
       const data = await res.json();
+      
+      if (!res.ok) {
+        setToast({ type: 'error', msg: data.error || 'Error submitting assessment.' });
+        return;
+      }
+      
       localStorage.setItem('pi_result', JSON.stringify({ name, userId, result: data }));
       window.location.assign('/results');
     } catch (e) {
@@ -172,7 +199,27 @@ const Assessment = () => {
           </div>
         </div>
 
-        {questions.length > 0 && (
+        {loadingQuestions && (
+          <div className="assessment-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div className="loading-spinner" style={{ margin: '0 auto 16px' }} />
+              <p className="muted">Loading questions...</p>
+            </div>
+          </div>
+        )}
+
+        {!loadingQuestions && questions.length === 0 && (
+          <div className="assessment-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ textAlign: 'center' }}>
+              <p className="muted">No questions available. Please check if the server is running.</p>
+              <button className="btn-secondary" style={{ marginTop: '16px' }} onClick={() => window.location.reload()}>
+                Retry
+              </button>
+            </div>
+          </div>
+        )}
+
+        {!loadingQuestions && questions.length > 0 && (
           <div className="assessment-card">
             <div id="question-container">{renderQuestion()}</div>
 
