@@ -1518,65 +1518,65 @@
 <owl:NamedIndividual rdf:about="#Score_hr1_Agreeableness">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Agreeableness"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">48.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Conscientiousness">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Conscientiousness"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">52.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">46.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Neuroticism">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Neuroticism"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">36.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">44.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Extraversion">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Extraversion"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">58.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Openness">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Openness"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">46.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">52.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Participant_hr1">
   <rdf:type rdf:resource="#Participant"/>
   <participantID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hr1</participantID>
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">umar</rdfs:label>
-  <jobPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.18</jobPerformance>
-  <academicPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">57.22</academicPerformance>
+  <jobPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">58.72</jobPerformance>
+  <academicPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">56.38</academicPerformance>
   <hasJustificationReport rdf:datatype="http://www.w3.org/2001/XMLSchema#string">**1. Trait-by-Trait Justification**
 
-- **Agreeableness (48.0)**: The user's score in agreeableness is relatively low, indicating a tendency towards being less cooperative and less empathetic. This is reflected in answers such as "I feel little concern for others" (effective score 4) and "I am not interested in other people's problems" (effective score 5), which suggest a lower level of concern for others' feelings and needs. However, there are also instances where the user shows empathy, like "I make people feel at ease" (effective score 1) and "I sympathize with others' feelings" (effective score 1), indicating some level of variability in their responses towards agreeableness.
+- **Agreeableness (60.0):** Your score suggests you have a moderate level of agreeableness. This is evident from questions like "I feel little concern for others" (effective score 5) and "I am not interested in other people's problems" (effective score 4), which indicate lower agreeableness. However, questions like "I make people feel at ease" (effective score 1) and "I sympathize with others' feelings" (effective score 2) show a capacity for empathy and kindness, balancing out your agreeableness score. The mix of high and low scores across different questions reflects a nuanced approach to interpersonal relationships.
 
-- **Conscientiousness (52.0)**: The user's conscientiousness score is slightly above average, indicating a moderate level of organization, diligence, and carefulness. Questions like "I leave my belongings around" (effective score 4) and "I shirk my duties" (effective score 5) suggest some lack of organization and responsibility, but answers such as "I am always prepared" (effective score 2) and "I follow a schedule" (effective score 1) indicate a capacity for planning and adherence to routines.
+- **Conscientiousness (46.0):** Your conscientiousness score is below the midpoint, indicating a tendency towards being less organized and less diligent. Questions like "I leave my belongings around" (effective score 5) and "I shirk my duties" (effective score 3) suggest a lack of thoroughness and responsibility in some aspects of your life. However, answers like "I am always prepared" (effective score 1) and "I follow a schedule" (effective score 1) show that you are capable of being organized and responsible, but this may not be consistent across all situations.
 
-- **Neuroticism (36.0)**: The user's neuroticism score is relatively low, suggesting they tend to be more emotionally stable and less prone to negative emotions like anxiety, anger, or sadness. This is supported by answers like "I am relaxed most of the time" (effective score 4) and "I seldom feel blue" (effective score 4), though there are also indications of emotional sensitivity in answers like "I get stressed out easily" (effective score 2) and "I worry about things" (effective score 2).
+- **Neuroticism (44.0):** With a score below the midpoint, you tend to be less neurotic, meaning you are generally more emotionally stable. Questions such as "I am relaxed most of the time" (effective score 5) and "I seldom feel blue" (effective score 4) support this, indicating low levels of stress and sadness. However, responses like "I get stressed out easily" (effective score 1) and "I worry about things" (effective score 1) suggest that while you may be generally stable, there are situations or topics that can significantly affect your emotional state.
 
-- **Extraversion (60.0)**: The user's extraversion score is above average, indicating a tendency towards being outgoing, sociable, and seeking social interaction. This is reflected in answers such as "I am the life of the party" (effective score 2), "I start conversations" (effective score 1), and "I don't mind being the center of attention" (effective score 1), though there are also more reserved responses like "I am quiet around strangers" (effective score 5) and "I don't like to draw attention to myself" (effective score 5), suggesting some variability in their extraverted behaviors.
+- **Extraversion (58.0):** Your extraversion score is slightly above the midpoint, suggesting you lean towards being more outgoing and sociable. Questions like "I am quiet around strangers" (effective score 5) and "I don't talk a lot" (effective score 5) initially suggest introversion, but answers like "I am the life of the party" (effective score 1) and "I start conversations" (effective score 2) indicate a capacity for extraverted behavior, especially in comfortable or familiar settings. This mix suggests you may be adaptable in your social approach.
 
-- **Openness (46.0)**: The user's openness score is slightly below average, suggesting a relatively lower level of curiosity, openness to experience, and appreciation for art and ideas. This is indicated by answers like "I have difficulty understanding abstract ideas" (effective score 4) and "I am not interested in abstract ideas" (effective score 5), though there are also responses that suggest a higher level of openness, such as "I have a rich vocabulary" (effective score 2), "I am full of ideas" (effective score 1), and "I spend time reflecting on things" (effective score 1).
+- **Openness (52.0):** With a score around the midpoint, you exhibit a moderate level of openness to experience. Questions such as "I have difficulty understanding abstract ideas" (effective score 5) and "I am not interested in abstract ideas" (effective score 4) suggest some resistance to complex or theoretical concepts. However, answers like "I have a vivid imagination" (effective score 1), "I am full of ideas" (effective score 1), and "I spend time reflecting on things" (effective score 1) indicate a creative and open-minded side, particularly when engaged with topics of personal interest.
 
 **2. Academic Performance Justification**
 
-The predicted academic performance score is 57.22. This moderate score can be attributed to the user's relatively balanced personality traits. Their above-average extraversion (60.0) might help in group projects and class discussions, potentially enhancing their learning experience through social interactions. However, their slightly below-average openness (46.0) could indicate a lesser inclination towards exploring complex ideas or theoretical concepts, which might affect their performance in subjects requiring deep critical thinking or creativity. The moderate levels of conscientiousness (52.0) and agreeableness (48.0), along with low neuroticism (36.0), suggest a stable and somewhat organized approach to academic tasks, which can contribute to consistent performance but might not necessarily drive academic excellence without additional motivation or interest.
+Your academic performance prediction (56.38) is influenced by several traits. Conscientiousness (46.0) plays a significant role, as higher levels of organization, diligence, and responsibility are typically associated with better academic outcomes. While your score in this area is below average, indicating potential challenges with time management and thoroughness in academic tasks, the presence of some organized and responsible behaviors (as seen in questions like "I am always prepared" and "I follow a schedule") suggests that with effort, you can adapt to academic demands. Openness to experience (52.0) also impacts academic performance, as it relates to curiosity, love for learning, and adaptability in academic settings. Your moderate score suggests you may approach academic challenges with a mix of creativity and skepticism, potentially benefiting from engaging, open-ended learning experiences. Overall, while there are areas for improvement, particularly in consistency of conscientious behaviors, your academic performance can be enhanced by leveraging your strengths in openness and agreeableness in collaborative and creative academic pursuits.
 
 **3. Job Performance Justification**
 
-The predicted job performance score is 60.18. This score is slightly higher than the academic performance prediction, which could be due to the user's extraverted nature (60.0) being more directly beneficial in many professional settings, such as sales, marketing, or team management, where social skills and the ability to interact with colleagues and clients are highly valued. The user's moderate conscientiousness (52.0) suggests they can be reliable and organized in their work, which is a valuable asset in most job roles. However, the slightly below-average openness (46.0) might limit their ability to innovate or adapt quickly to new ideas or methodologies, potentially affecting their performance in roles that require a high degree of creativity or rapid learning. The low neuroticism (36.0) is beneficial as it suggests emotional stability, which can help in managing work stress and maintaining positive working relationships.
+Your job performance prediction (58.72) is slightly higher than your academic performance prediction, reflecting how different traits influence success in professional settings. Extraversion (58.0) and agreeableness (60.0) are particularly relevant, as they impact interpersonal relationships and teamwork. Your scores suggest you have the potential to be a sociable and cooperative team member, which is valuable in most work environments. Conscientiousness (46.0) remains a critical factor, as responsibility, organization, and diligence are essential for meeting job expectations and deadlines. While your score indicates room for improvement, demonstrating reliability and follow-through in professional responsibilities can significantly enhance your job performance. Neuroticism (44.0) being on the lower side is also beneficial, as emotional stability can help in managing work stress and maintaining consistent performance. Overall, focusing on developing your conscientiousness while leveraging your extraverted and agreeable nature can lead to better job performance and career advancement.
 
 **4. Plain-English Summary**
 
-In summary, your personality profile suggests you're a sociable and emotionally stable individual with a moderate level of organization and a somewhat lower inclination towards empathy and intellectual exploration. Your strengths in social interactions and stability could serve you well in both academic and professional settings, particularly in roles that value teamwork and communication. However, to achieve excellence, you might need to work on developing your critical thinking skills, exploring complex ideas, and finding ways to motivate yourself towards deeper learning and innovation. Your balanced approach to tasks and emotional stability provide a solid foundation for consistent performance, but leveraging your extraverted nature and finding ways to engage more with abstract ideas could further enhance your achievements.</hasJustificationReport>
-  <roleFitScore rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Software Engineer:76.6</roleFitScore>
-  <roleFitScore rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Manager:76.0</roleFitScore>
-  <roleFitScore rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Researcher:74.48</roleFitScore>
+In simple terms, your personality assessment shows you're a bit of a mix across different traits. You tend to be moderately sociable, somewhat emotionally stable, and have a moderate interest in new ideas and experiences. While you show potential for kindness and empathy, there are also indications of less concern for others at times. Your organizational skills and diligence could use some improvement, which might affect your performance in academic and professional settings. However, you have shown the ability to be responsible and prepared in certain situations, which is a positive sign. By focusing on becoming more consistent in your organizational habits and leveraging your sociable and open-minded nature, you can improve your outcomes in both academics and your career. Remember, personal growth and development are key to enhancing your strengths and addressing areas for improvement.</hasJustificationReport>
+  <roleFitScore rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Software Engineer:75.92</roleFitScore>
+  <roleFitScore rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Manager:76.68</roleFitScore>
+  <roleFitScore rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Researcher:75.48</roleFitScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#['ali']">

@@ -316,7 +316,7 @@ const Results = () => {
             <div>
               <p className="eyebrow">Results</p>
               <h1>Your personality insights</h1>
-              <p className="lede">Hi {name}, here are the findings for ID {userId}.</p>
+              <p className="lede">Hi {name}, here’s your personalized readout—scroll to see what your answers say about you.</p>
             </div>
             <div className="pill">Completed</div>
           </div>
@@ -447,9 +447,8 @@ const Results = () => {
         </section>
       </main>
 
-      <section className="panel cta" style={{ marginTop: 16 }}>
-        <h2>Want to rerun or head back?</h2>
-        <div className="actions">
+      <section className="panel action-panel" style={{ marginTop: 16, marginBottom: 32 }}>
+        <div className="actions actions-full-row">
           <a className="btn primary" href="/assessment">Retake assessment</a>
           <a className="btn ghost" href="/">Back to landing</a>
         </div>

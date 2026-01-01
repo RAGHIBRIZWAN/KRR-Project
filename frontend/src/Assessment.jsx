@@ -138,7 +138,7 @@ const Assessment = () => {
     if (!current) return null;
     return (
       <div className="question-wrapper">
-        <span className="trait-badge">{traitLabels[current.trait] || current.trait}</span>
+  
         <p className="question-text">{current.text}</p>
         <div className="rating-scale">
           {ratingChoices.map((choice) => (

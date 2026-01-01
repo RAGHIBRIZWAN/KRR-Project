@@ -240,6 +240,26 @@ h3 {
   margin-top: 24px;
 }
 
+.actions-full-row {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.actions-full-row .btn {
+  flex: 1 1 0;
+  justify-content: center;
+  text-align: center;
+}
+
+.action-panel {
+  width: 100%;
+  padding: 20px;
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
+  background: rgba(12, 25, 41, 0.6);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
 .btn {
   border: 1px solid transparent;
   border-radius: 14px;
