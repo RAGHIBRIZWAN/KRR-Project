@@ -1518,61 +1518,65 @@
 <owl:NamedIndividual rdf:about="#Score_hr1_Agreeableness">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Agreeableness"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">66.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">48.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Conscientiousness">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Conscientiousness"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">44.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">52.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Neuroticism">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Neuroticism"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">62.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">36.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Extraversion">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Extraversion"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">64.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Score_hr1_Openness">
   <rdf:type rdf:resource="#TraitScore"/>
   <scoresOnTrait rdf:resource="#Openness"/>
-  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">58.0</meanScore>
+  <meanScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">46.0</meanScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Participant_hr1">
   <rdf:type rdf:resource="#Participant"/>
   <participantID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hr1</participantID>
   <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">umar</rdfs:label>
-  <jobPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">56.96</jobPerformance>
-  <academicPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">55.64</academicPerformance>
+  <jobPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">60.18</jobPerformance>
+  <academicPerformance rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">57.22</academicPerformance>
   <hasJustificationReport rdf:datatype="http://www.w3.org/2001/XMLSchema#string">**1. Trait-by-Trait Justification**
 
-* **Agreeableness (66.0)**: The user's score in Agreeableness is moderate, indicating a mix of cooperative and competitive tendencies. For instance, they reported being able to "make people feel at ease" (question 19) and "sympathize with others' feelings" (question 21), but also stated that they "feel little concern for others" (question 1) and "am not really interested in others" (question 4). This inconsistency suggests that the user may be selective in their empathetic responses, which is reflected in their moderate Agreeableness score.
-* **Conscientiousness (44.0)**: The user's score in Conscientiousness is relatively low, indicating a tendency to be disorganized and careless. This is evident in their responses to questions such as "I leave my belongings around" (question 5) and "I shirk my duties" (question 8), which they answered with high effective scores (2 and 1, respectively). Additionally, they reported being "not exacting in my work" (question 26) and "not always prepared" (question 25), which further supports their low Conscientiousness score.
-* **Neuroticism (62.0)**: The user's score in Neuroticism is moderate to high, indicating a tendency to experience negative emotions and stress. For example, they reported "getting stressed out easily" (question 31), "often feeling blue" (question 32), and "getting upset easily" (question 35). However, they also stated that they are "relaxed most of the time" (question 9) and "seldom feel blue" (question 10), which suggests that their emotional experiences may be variable and context-dependent.
-* **Extraversion (64.0)**: The user's score in Extraversion is moderate to high, indicating a tendency to be outgoing and sociable. They reported being "comfortable around people" (question 40), "starting conversations" (question 41), and "not minding being the center of attention" (question 43). However, they also stated that they are "quiet around strangers" (question 11) and "keep in the background" (question 13), which suggests that their extraverted tendencies may be context-dependent and influenced by social situations.
-* **Openness (58.0)**: The user's score in Openness is moderate, indicating a mix of creative and conventional tendencies. They reported having "a rich vocabulary" (question 44), being "full of ideas" (question 45), and having "a vivid imagination" (question 46). However, they also stated that they "have difficulty understanding abstract ideas" (question 16) and are "not interested in abstract ideas" (question 17), which suggests that their Openness may be limited to specific domains or areas of interest.
+- **Agreeableness (48.0)**: The user's score in agreeableness is relatively low, indicating a tendency towards being less cooperative and less empathetic. This is reflected in answers such as "I feel little concern for others" (effective score 4) and "I am not interested in other people's problems" (effective score 5), which suggest a lower level of concern for others' feelings and needs. However, there are also instances where the user shows empathy, like "I make people feel at ease" (effective score 1) and "I sympathize with others' feelings" (effective score 1), indicating some level of variability in their responses towards agreeableness.
+
+- **Conscientiousness (52.0)**: The user's conscientiousness score is slightly above average, indicating a moderate level of organization, diligence, and carefulness. Questions like "I leave my belongings around" (effective score 4) and "I shirk my duties" (effective score 5) suggest some lack of organization and responsibility, but answers such as "I am always prepared" (effective score 2) and "I follow a schedule" (effective score 1) indicate a capacity for planning and adherence to routines.
+
+- **Neuroticism (36.0)**: The user's neuroticism score is relatively low, suggesting they tend to be more emotionally stable and less prone to negative emotions like anxiety, anger, or sadness. This is supported by answers like "I am relaxed most of the time" (effective score 4) and "I seldom feel blue" (effective score 4), though there are also indications of emotional sensitivity in answers like "I get stressed out easily" (effective score 2) and "I worry about things" (effective score 2).
+
+- **Extraversion (60.0)**: The user's extraversion score is above average, indicating a tendency towards being outgoing, sociable, and seeking social interaction. This is reflected in answers such as "I am the life of the party" (effective score 2), "I start conversations" (effective score 1), and "I don't mind being the center of attention" (effective score 1), though there are also more reserved responses like "I am quiet around strangers" (effective score 5) and "I don't like to draw attention to myself" (effective score 5), suggesting some variability in their extraverted behaviors.
+
+- **Openness (46.0)**: The user's openness score is slightly below average, suggesting a relatively lower level of curiosity, openness to experience, and appreciation for art and ideas. This is indicated by answers like "I have difficulty understanding abstract ideas" (effective score 4) and "I am not interested in abstract ideas" (effective score 5), though there are also responses that suggest a higher level of openness, such as "I have a rich vocabulary" (effective score 2), "I am full of ideas" (effective score 1), and "I spend time reflecting on things" (effective score 1).
 
 **2. Academic Performance Justification**
 
-The user's Academic Performance prediction (55.64) is influenced by their trait scores, particularly Conscientiousness and Openness. Their low Conscientiousness score suggests that they may struggle with organization, time management, and attention to detail, which are essential skills for academic success. Additionally, their moderate Openness score indicates that they may not be as inclined to explore new ideas or think critically, which can also impact their academic performance. However, their moderate to high scores in Agreeableness, Extraversion, and Neuroticism may help them navigate social aspects of academic life, such as group work and interactions with instructors.
+The predicted academic performance score is 57.22. This moderate score can be attributed to the user's relatively balanced personality traits. Their above-average extraversion (60.0) might help in group projects and class discussions, potentially enhancing their learning experience through social interactions. However, their slightly below-average openness (46.0) could indicate a lesser inclination towards exploring complex ideas or theoretical concepts, which might affect their performance in subjects requiring deep critical thinking or creativity. The moderate levels of conscientiousness (52.0) and agreeableness (48.0), along with low neuroticism (36.0), suggest a stable and somewhat organized approach to academic tasks, which can contribute to consistent performance but might not necessarily drive academic excellence without additional motivation or interest.
 
 **3. Job Performance Justification**
 
-The user's Job Performance prediction (56.96) is also influenced by their trait scores, particularly Conscientiousness and Extraversion. Their low Conscientiousness score suggests that they may struggle with meeting deadlines, following procedures, and maintaining a high level of productivity, which are critical skills for job success. However, their moderate to high Extraversion score indicates that they may excel in social aspects of work, such as communication, teamwork, and customer service. Additionally, their moderate Agreeableness score suggests that they may be able to build positive relationships with colleagues and clients, which can also contribute to job success.
+The predicted job performance score is 60.18. This score is slightly higher than the academic performance prediction, which could be due to the user's extraverted nature (60.0) being more directly beneficial in many professional settings, such as sales, marketing, or team management, where social skills and the ability to interact with colleagues and clients are highly valued. The user's moderate conscientiousness (52.0) suggests they can be reliable and organized in their work, which is a valuable asset in most job roles. However, the slightly below-average openness (46.0) might limit their ability to innovate or adapt quickly to new ideas or methodologies, potentially affecting their performance in roles that require a high degree of creativity or rapid learning. The low neuroticism (36.0) is beneficial as it suggests emotional stability, which can help in managing work stress and maintaining positive working relationships.
 
 **4. Plain-English Summary**
 
-In summary, the user's personality traits suggest that they are a complex individual with both strengths and weaknesses. They tend to be moderately outgoing and sociable, but may struggle with organization and time management. They are capable of empathy and cooperation, but may also be selective in their emotional responses. Their creative and conventional tendencies are balanced, but may be limited to specific areas of interest. In academic and job settings, they may face challenges related to organization, attention to detail, and critical thinking, but may excel in social aspects of these environments. Overall, the user's trait scores suggest that they have the potential to succeed in various contexts, but may need to develop strategies to overcome their weaknesses and capitalize on their strengths.</hasJustificationReport>
-  <roleFitScore rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Software Engineer:71.36</roleFitScore>
-  <roleFitScore rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Manager:78.2</roleFitScore>
-  <roleFitScore rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Researcher:73.56</roleFitScore>
+In summary, your personality profile suggests you're a sociable and emotionally stable individual with a moderate level of organization and a somewhat lower inclination towards empathy and intellectual exploration. Your strengths in social interactions and stability could serve you well in both academic and professional settings, particularly in roles that value teamwork and communication. However, to achieve excellence, you might need to work on developing your critical thinking skills, exploring complex ideas, and finding ways to motivate yourself towards deeper learning and innovation. Your balanced approach to tasks and emotional stability provide a solid foundation for consistent performance, but leveraging your extraverted nature and finding ways to engage more with abstract ideas could further enhance your achievements.</hasJustificationReport>
+  <roleFitScore rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Software Engineer:76.6</roleFitScore>
+  <roleFitScore rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Manager:76.0</roleFitScore>
+  <roleFitScore rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Researcher:74.48</roleFitScore>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#['ali']">

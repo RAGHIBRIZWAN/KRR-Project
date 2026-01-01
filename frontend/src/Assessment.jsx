@@ -176,7 +176,7 @@ const Assessment = () => {
             <p className="subtitle">Answer each statement honestly. Progress saves locally.</p>
           </div>
           <div className="participant">
-            <div className="muted">Participant</div>
+            <div className="muted participant-label">Participant</div>
             <div className="participant-name">{name}</div>
             <div className="muted small">ID: {userId}</div>
           </div>
@@ -191,7 +191,7 @@ const Assessment = () => {
           </div>
           <div className="sidebar-actions">
             <button className="btn-secondary" onClick={() => window.location.assign('/assessment')}>
-              ← Change
+              Switch user
             </button>
             <button className="btn-ghost" onClick={loadPrevious} disabled={!userId || loadingPrevious}>
               {loadingPrevious ? 'Loading…' : 'History'}

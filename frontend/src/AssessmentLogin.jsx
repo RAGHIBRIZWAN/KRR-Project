@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 const API_BASE = window.location.port === '5173' ? 'http://localhost:5000' : '';
 
@@ -6,13 +6,6 @@ const AssessmentLogin = () => {
   const [name, setName] = useState('');
   const [userId, setUserId] = useState('');
   const [toast, setToast] = useState(null);
-
-  useEffect(() => {
-    const savedName = localStorage.getItem('pi_name') || '';
-    const savedId = localStorage.getItem('pi_userId') || '';
-    if (savedName) setName(savedName);
-    if (savedId) setUserId(savedId);
-  }, []);
 
   const start = async () => {
     if (!name || !userId) {
@@ -55,6 +48,11 @@ const AssessmentLogin = () => {
             <p className="eyebrow">Step 1 · Identify</p>
             <h1>Big Five Personality Assessment</h1>
             <p className="subtitle">Start by telling us who you are. We keep your info local while you complete the 50 questions.</p>
+            <div className="meta-row">
+              <span className="meta-pill">⚡ 50 statements</span>
+              <span className="meta-pill">⏱️ ~5 minutes</span>
+              <span className="meta-pill">🔒 Local only</span>
+            </div>
           </div>
 
           <div className="form-group">
@@ -65,20 +63,43 @@ const AssessmentLogin = () => {
             <label>User ID</label>
             <input value={userId} onChange={(e) => setUserId(e.target.value)} placeholder="Enter your ID" />
           </div>
-          <button className="btn-primary" onClick={start} disabled={!name || !userId}>
-            Start Assessment →
-          </button>
+          <div className="button-stack">
+            <button className="btn-primary" onClick={start} disabled={!name || !userId}>
+              Start Assessment →
+            </button>
+            <a className="btn-ghost" href="/">
+              ← Back to landing
+            </a>
+          </div>
 
+          <div className="assurance-card">
+            <div className="assurance-item">
+              <span className="assurance-icon">🔐</span>
+              <div>
+                <div className="assurance-title">Privacy-first</div>
+                <div className="assurance-text">We keep your name and ID in your browser while you answer.</div>
+              </div>
+            </div>
+            <div className="assurance-item">
+              <span className="assurance-icon">🧭</span>
+              <div>
+                <div className="assurance-title">Clear next steps</div>
+                <div className="assurance-text">50 statements on a 1–5 scale, then instant scores and insights.</div>
+              </div>
+            </div>
+            <div className="assurance-item">
+              <span className="assurance-icon">📊</span>
+              <div>
+                <div className="assurance-title">Performance signals</div>
+                <div className="assurance-text">See trait scores plus job and academic readiness indicators.</div>
+              </div>
+            </div>
+          </div>
           <div className="mini-steps">
             <div className="chip">Fast</div>
             <div className="chip">Private</div>
             <div className="chip">Research-backed</div>
           </div>
-          <ul className="login-notes">
-            <li>Your name and ID stay in your browser during the session.</li>
-            <li>50 statements, 1–5 scale. Takes about 5 minutes.</li>
-            <li>Results page shows scores, performance signals, and AI narrative.</li>
-          </ul>
         </div>
       </div>
 

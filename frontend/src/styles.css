@@ -610,7 +610,13 @@ h3 {
 
 .cta {
   background: linear-gradient(135deg, rgba(13, 25, 39, 0.9), rgba(11, 20, 33, 0.95));
-  border: 1px solid var(--accent);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cta:hover {
+  border-color: var(--accent);
   box-shadow: 0 0 40px rgba(45, 212, 191, 0.15);
 }
 
@@ -641,12 +647,12 @@ h3 {
 
 /* Assessment layout */
 .assessment-page {
-  height: 100vh;
+  min-height: 100vh;
   padding: 12px;
-  overflow: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .assessment-page .container {
@@ -661,9 +667,16 @@ h3 {
 }
 
 .assessment-page .container.single {
-  grid-template-columns: minmax(320px, 520px);
+  grid-template-columns: minmax(320px, 1fr);
   justify-content: center;
-  margin-top: 32px;
+  margin-top: 0;
+  width: 100%;
+}
+
+.assessment-page .container.single .login-card {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .login-card,
@@ -748,6 +761,27 @@ h3 {
   line-height: 1.5;
 }
 
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  font-weight: 700;
+  font-size: 13px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
 .logo-icon {
   width: 48px;
   height: 48px;
@@ -788,6 +822,63 @@ h3 {
   color: #0b1724;
   cursor: pointer;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
+}
+
+.button-stack {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.button-stack .btn-primary,
+.button-stack .btn-ghost {
+  width: auto;
+  flex: 1 1 0;
+  justify-content: center;
+  text-align: center;
+}
+
+.assurance-card {
+  margin-top: 18px;
+  padding: 14px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(15, 23, 42, 0.85));
+  display: grid;
+  gap: 12px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+}
+
+.assurance-item {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.assurance-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(45, 212, 191, 0.12);
+  color: var(--accent);
+  font-size: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.assurance-title {
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 4px;
+}
+
+.assurance-text {
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: 14px;
 }
 
 .btn-ghost {
@@ -1599,10 +1690,13 @@ h3 {
 
 .participant .muted {
   font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
   color: #94a3b8;
   font-weight: 600;
+}
+
+.participant-label {
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .participant-name {

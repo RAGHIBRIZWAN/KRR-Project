@@ -320,10 +320,6 @@ const Results = () => {
             </div>
             <div className="pill">Completed</div>
           </div>
-          <div className="actions">
-            <a className="btn primary" href="/assessment">Retake assessment</a>
-            <a className="btn ghost" href="/">Back to landing</a>
-          </div>
         </section>
 
         <section className="panel results-grid">
@@ -450,6 +446,14 @@ const Results = () => {
           )}
         </section>
       </main>
+
+      <section className="panel cta" style={{ marginTop: 16 }}>
+        <h2>Want to rerun or head back?</h2>
+        <div className="actions">
+          <a className="btn primary" href="/assessment">Retake assessment</a>
+          <a className="btn ghost" href="/">Back to landing</a>
+        </div>
+      </section>
 
       {isModalOpen && (
         <div className="modal-backdrop" onClick={() => setIsModalOpen(false)}>
